@@ -1,5 +1,5 @@
 #setup
-bash ~/setup
+bash setup
 echo 'enter domain name'
 read var
 echo $var > domain.txt
@@ -113,4 +113,4 @@ fi
 echo -e '\nEmail service \n'
 cat stdtemp.txt | grep 'MX' | cut -d ' ' -f 4 > mail.txt     #using same format to search email
 
-bash ~/mailsearch          #run separate code
+bash mailsearch          #run separate code
