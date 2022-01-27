@@ -1,8 +1,8 @@
 # Dnstool
-install:
+##install:
 
-dnsrecon
+###dnsrecon
+###whois
 
-whois
-
-To run command type bash digdns
+##To run command
+###bash ~/digdns
