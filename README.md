@@ -5,4 +5,4 @@ dnsrecon
 
 whois
 
-To run command type bash ~/digdns
+To run command type bash digdns
