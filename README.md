@@ -5,4 +5,4 @@ install:
 #whois
 
 #To run command:
-bash ~/digdns
+bash digdns
