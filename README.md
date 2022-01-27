@@ -9,4 +9,4 @@ host
 
 whois
 
-to run command type bash~/digdns
+To run command type bash~/digdns
