@@ -38,11 +38,11 @@ elif [[ $(cat mail.txt | grep -i 'pphosted.com' -c) -gt 0 ]] ; then
   echo -e 'ProofPoint'
 else
 
-#if none match
+#if none match 
 
 host -t mx  $(cat mail.txt | sort -R | head -n 1) | grep 'has address' | cut -d ' ' -f 4 | grep -v -F : | sort -R | head -n 1 > unknown.txt       #check for mx record ip and perform whois
 if [[ $(cat unknown.txt | wc -l) -eq 0 ]] ; then
-host -t a $(cat mail.txt | sort -R | head -n 1) | grep 'has address' | cut -d ' ' -f 4 | grep -v -F : | sort -R | head -n 1 > unknown.txt
+host -t a $(cat mail.txt | sort -R | head -n 1) | grep 'has address' | cut -d ' ' -f 4 | grep -v -F : | sort -R | head -n 1 > unknown.txt         #if multiple ip use sort -R(random) for whois
 fi
   if [[ $(cat unknown.txt | wc -l) -eq 0 ]] ; then     #if no mx record ip stop script
       echo -e '  **No email record in database**'
@@ -53,14 +53,17 @@ fi
     whois $(cat unknown.txt) > whois.txt
     cat whois.txt | grep -w -E -i 'e-mail'| tail -n 1 | cut -d '@' -f 2 | cut -d ' ' -f 1 > mail.txt
     if [[ $(cat mail.txt | wc -l) -eq 0 ]] ; then
-    cat whois.txt | grep -F -A 1 'contact:'| tail -n 1 | cut -d '@' -f 2 | cut -d ' ' -f 1 > mail.txt
+    cat whois.txt | grep -F -A 1 'Administrative contact:'| tail -n 1 | cut -d '@' -f 2 | cut -d ' ' -f 1 > mail.txt
     fi
     if [[ $(cat mail.txt | wc -l) -eq 0 ]] ; then
     cat whois.txt | grep --no-ignore-case 'Email:' | tail -n 1 | cut -d '@' -f 2 > mail.txt
     fi
     if [[ $(cat mail.txt | wc -l) -eq 0 ]] ; then    #if no whois result stop script
     echo -e '  **No email record**'
+    elif [[ $(cat mail.txt) == $(cat xmail.txt) ]] ; then  #if mail.txt is the same for second round stop script
+    echo -e '  **No email record in database**'
     else
+    cat mail.txt > xmail.txt
     bash mailsearch      #if there is result run script again
     fi
   fi

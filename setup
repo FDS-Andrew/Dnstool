@@ -15,5 +15,8 @@ touch nsipcomp.txt
 touch mail.txt
 touch unknown.txt
 touch whois.txt
+touch xmail.txt
+truncate -s 0 mail.txt
+truncate -s 0 xmail.txt
 touch ~/.digrc
 cat digrc > ~/.digrc
