@@ -1,0 +1,40 @@
+# A different approach to recon
+
+## setup
+num=0
+RED='\033[0;31m'     # colorcode
+NA='\033[0m'
+LGREEN='\033[1;32m'
+reconvar=( A AAAA MX NS SRV TXT DS )
+
+## execution
+echo -e "${LGREEN}Please enter domain name${NA}"
+read var
+while [[ $num -le 6 ]] ; do 
+  echo -e "\n${LGREEN}${reconvar[$num]} records:${NA}\n"
+  if [[ $(dig $var -t $(echo ${reconvar[$num]}) | wc -l) -eq 0 ]] ; then
+    echo -e "${RED}No ${reconvar[$num]} records${NA}"
+  else
+    dig $var -t $(echo ${reconvar[$num]})
+  fi
+  num=$(($num + 1 ))
+done
+
+## AS & Country query
+nscount=$(dig -t ns $var | grep 'NS' | wc -l)           # NS count
+echo -e "${LGREEN}AS number of         ${NA}$var\n"    # domain AS
+if [[ $(dig -t a $var | cut -d 'A' -f 2 | wc -l) -gt 0 ]] ; then
+  whois -h whois.cymru.com $(dig -t a $var | cut -d 'A' -f 2) 
+elif [[ $(dig -t aaaa $var | cut -d 'I' -f 2 | cut -d ' ' -f 3 | wc -l) -gt 0 ]] ; then
+  whois -h whois.cymru.com $(dig -t aaaa $var | cut -d 'I' -f 2 | cut -d ' ' -f 3)
+else  
+  echo -e "$var ${RED}has no AS number${NA}\n"
+fi
+dig -t ns $var | grep 'NS' | cut -d 'S' -f 2 |sort -u > ns.txt     # NS AS
+dig -t a $(cat ns.txt) | cut -d 'A' -f 2 | sed -n $(echo $num)p > nsip.txt
+num=1      
+while [[ $num -le $nscount ]] ; do
+  echo -e "${LGREEN}AS number of ${NA}$(cat ns.txt | sed -n $(echo $num)p)\n"
+  whois -h whois.cymru.com "$(cat nsip.txt | sed -n $(echo $num)p)"
+  num=$(($num + 1 ))
+done
