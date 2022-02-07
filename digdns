@@ -114,3 +114,9 @@ echo -e '\nEmail service \n'
 cat stdtemp.txt | grep 'MX' | cut -d ' ' -f 4 > mail.txt     #using same format to search email
 
 bash mailsearch          #run separate code
+
+#cleaning
+touch clean
+cat setup | grep touch | sed s/touch/rm/ > clean
+bash clean
+
