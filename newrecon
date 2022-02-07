@@ -15,14 +15,14 @@ while [[ $num -le 6 ]] ; do
   if [[ $(dig $var -t $(echo ${reconvar[$num]}) | wc -l) -eq 0 ]] ; then
     echo -e "${RED}No ${reconvar[$num]} records${NA}"
   else
-    dig $var -t $(echo ${reconvar[$num]})
+    dig $var -t $(echo ${reconvar[$num]}) | grep ${reconvar[$num]}
   fi
   num=$(($num + 1 ))
 done
 
 ## AS & Country query
 nscount=$(dig -t ns $var | grep 'NS' | wc -l)           # NS count
-echo -e "${LGREEN}AS number of         ${NA}$var\n"    # domain AS
+echo -e "\n${LGREEN}AS number of         ${NA}$var\n"    # domain AS
 if [[ $(dig -t a $var | cut -d 'A' -f 2 | wc -l) -gt 0 ]] ; then
   whois -h whois.cymru.com $(dig -t a $var | cut -d 'A' -f 2) 
 elif [[ $(dig -t aaaa $var | cut -d 'I' -f 2 | cut -d ' ' -f 3 | wc -l) -gt 0 ]] ; then
@@ -30,11 +30,26 @@ elif [[ $(dig -t aaaa $var | cut -d 'I' -f 2 | cut -d ' ' -f 3 | wc -l) -gt 0 ]]
 else  
   echo -e "$var ${RED}has no AS number${NA}\n"
 fi
-dig -t ns $var | grep 'NS' | cut -d 'S' -f 2 |sort -u > ns.txt     # NS AS
-dig -t a $(cat ns.txt) | cut -d 'A' -f 2 | sed -n $(echo $num)p > nsip.txt
+dig -t ns $var | grep 'NS' | cut -d 'S' -f 2 | sort -u > ns.txt     # NS AS
+dig -t a $(cat ns.txt) | cut -d 'A' -f 2 > nsip.txt
 num=1      
 while [[ $num -le $nscount ]] ; do
-  echo -e "${LGREEN}AS number of ${NA}$(cat ns.txt | sed -n $(echo $num)p)\n"
-  whois -h whois.cymru.com "$(cat nsip.txt | sed -n $(echo $num)p)"
+  echo -e "\n${LGREEN}AS number of ${NA}$(cat ns.txt | sed -n $(echo $num)p)\n"
+  whois -h whois.cymru.com $(cat nsip.txt | sed -n $(echo $num)p) 
   num=$(($num + 1 ))
 done
+
+## NS name compare
+whois $var -H | grep -i 'Domain servers' -A 4 | grep -i 'Domain servers' -v | cut -d ' ' -f 7 | sort -u > whoisns
+if [[ $(echo -e $whoisns | wc -l) -eq 0 ]] ; then   # whois ns
+  whois $var -H | grep -i 'Name Server' | cut -d ' ' -f 6 | sort -u > whoisns
+  if [[ $(echo -e $whoisns | wc -l ) -eq 0 ]] ; then
+    echo -e "\n${RED}No Whois record \n ${NA}"
+fi
+dig -t ns $var | grep 'NS' | cut -d 'S' -f 2 | sort -u > digns  # dig ns
+
+
+ 
+## Registrar
+echo -e "\n${LGREEN}Registrar Info \n${NA}"
+whois $var | sed s/'   R'/'R'/ | grep -w -E --no-ignore-case 'Registration Service'\|'Registrar:' | grep . | sort -u -f | head -n 1

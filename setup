@@ -1,5 +1,7 @@
 #setup
 
+
+
 touch domian.txt
 touch stdtemp.txt
 touch domainip.txt

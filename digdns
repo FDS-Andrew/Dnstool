@@ -1,6 +1,6 @@
 #setup
 bash setup
-echo 'enter domain name'
+echo -e "enter domain name"
 read var
 echo $var > domain.txt
 dnsrecon -d $var -t std --lifetime 10 > stdtemp.txt
