@@ -1,0 +1,28 @@
+[*] std: Performing General Enumeration against: centerlab.com.tw...
+[-] DNSSEC is not configured for centerlab.com.tw
+[*] 	 SOA dns.centerlab.com.tw 59.124.69.85
+[*] 	 NS dns2.centerlab.com.tw 122.146.12.30
+[-] 	 Recursion enabled on NS Server 122.146.12.30
+[*] 	 NS dns.centerlab.com.tw 59.124.69.85
+[*] 	 NS dns3.centerlab.com.tw 59.120.46.66
+[*] 	 NS dns1.centerlab.com.tw 60.250.144.252
+[*] 	 MX msl.centerlab.com.tw 59.120.46.67
+[*] 	 MX msl.centerlab.com.tw 59.124.69.86
+[*] 	 MX msl2.centerlab.com.tw 60.250.144.251
+[*] 	 TXT centerlab.com.tw MS=ms61687232
+[*] 	 TXT centerlab.com.tw v=spf1 ip4:59.120.46.68/27 ip4:59.124.69.86/24 ip4:60.250.144.250/24 ip4:168.95.4.0/24 mx -all
+[*] 	 TXT centerlab.com.tw jr7cmi8hgjtuh51q03lc3ht03f
+[*] 	 TXT _dmarc.centerlab.com.tw v=DMARC1;p=quarantine;pct=100;rua=mailto:admin@centerlab.com.tw
+[*] 	 TXT _domainkey.centerlab.com.tw t=y;o=~;
+[*] Enumerating SRV Records
+[+] 	 SRV _sip._tls.centerlab.com.tw sipdir.online.lync.com 52.113.64.147 443
+[+] 	 SRV _sip._tls.centerlab.com.tw sipdir.online.lync.com 2603:1047:0:1::b 443
+[+] 	 SRV _sip._tls.centerlab.com.tw sipdir.online.lync.com 2603:1047:0:9::f 443
+[+] 	 SRV _sip._tls.centerlab.com.tw sipdir.online.lync.com 2603:1047:0:2::b 443
+[+] 	 SRV _sip._tls.centerlab.com.tw sipdir.online.lync.com 2603:1047:0:8::f 443
+[+] 	 SRV _sipfederationtls._tcp.centerlab.com.tw sipfed.online.lync.com 52.113.64.147 5061
+[+] 	 SRV _sipfederationtls._tcp.centerlab.com.tw sipfed.online.lync.com 2603:1047:0:2::b 5061
+[+] 	 SRV _sipfederationtls._tcp.centerlab.com.tw sipfed.online.lync.com 2603:1047:0:8::f 5061
+[+] 	 SRV _sipfederationtls._tcp.centerlab.com.tw sipfed.online.lync.com 2603:1047:0:1::b 5061
+[+] 	 SRV _sipfederationtls._tcp.centerlab.com.tw sipfed.online.lync.com 2603:1047:0:9::f 5061
+[+] 10 Records Found

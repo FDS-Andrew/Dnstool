@@ -1,0 +1,32 @@
+Domain Name: centerlab.com.tw
+   Domain Status: ok
+   Registrant:
+      晟德大藥廠股份有限公司
+      CENTER LABORATORIES, INC.
+      warren  warren@centerlab.com.tw
+      +886.226558680
+      +886.226558380
+      7F., No.3-2, Park St., Nangang Dist., Taipei City 115, Taiwan (  
+      臺北市, 
+      TW
+
+   Administrative Contact:
+      warren  warren@centerlab.com.tw
+      +886.226558680
+      +886.226558380
+
+   Technical Contact:
+      warren  warren@centerlab.com.tw
+      +886.226558680
+      +886.226558380
+
+   Record expires on 2030-10-11 00:00:00 (UTC+8)
+   Record created on 2000-08-01 15:10:00 (UTC+8)
+
+   Domain servers in listed order:
+      dns.centerlab.com.tw      59.124.69.85 
+      dns1.centerlab.com.tw     59.124.69.86 
+      dns2.centerlab.com.tw     122.146.12.30 
+
+Registration Service Provider: TWNIC
+Registration Service URL: http://rs.twnic.net.tw/

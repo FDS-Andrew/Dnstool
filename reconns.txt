@@ -1,0 +1,4 @@
+dns.centerlab.com.tw
+dns1.centerlab.com.tw
+dns2.centerlab.com.tw
+dns3.centerlab.com.tw
