@@ -116,7 +116,6 @@ cat stdtemp.txt | grep 'MX' | cut -d ' ' -f 4 > mail.txt     #using same format 
 bash mailsearch          #run separate code
 
 #cleaning
-touch clean
 cat setup | grep touch | sed s/touch/rm/ > clean
 bash clean
 
