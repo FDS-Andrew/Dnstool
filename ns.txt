@@ -1,3 +1,0 @@
-	dns1.freedom.net.tw.
-	dns2.freedom.net.tw.
-	dns3.freedom.net.tw.
