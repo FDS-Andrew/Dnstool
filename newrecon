@@ -1,13 +1,15 @@
 # A different approach to recon
 
-## setup
+# setup
 num=0
 RED='\033[0;31m'     # colorcode
 NA='\033[0m'
 LGREEN='\033[1;32m'
 reconvar=( A AAAA MX NS SRV TXT DS )
+touch ~/.digrc
+echo +nocmd +nocomments +nostats +noquestion +noauthority +noadditional +multiline > ~/.digrc
 
-## execution
+# execution
 echo -e "${LGREEN}Please enter domain name${NA}"
 read var
 while [[ $num -le 6 ]] ; do 
@@ -20,7 +22,7 @@ while [[ $num -le 6 ]] ; do
   num=$(($num + 1 ))
 done
 
-## AS & Country query
+# AS & Country query
 nscount=$(dig -t ns $var | grep 'NS' | wc -l)           # NS count
 echo -e "\n${LGREEN}AS number of         ${NA}$var\n"    # domain AS
 if [[ $(dig -t a $var | cut -d 'A' -f 2 | wc -l) -gt 0 ]] ; then
@@ -30,26 +32,33 @@ elif [[ $(dig -t aaaa $var | cut -d 'I' -f 2 | cut -d ' ' -f 3 | wc -l) -gt 0 ]]
 else  
   echo -e "$var ${RED}has no AS number${NA}\n"
 fi
-dig -t ns $var | grep 'NS' | cut -d 'S' -f 2 | sort -u > ns.txt     # NS AS
-dig -t a $(cat ns.txt) | cut -d 'A' -f 2 > nsip.txt
-num=1      
-while [[ $num -le $nscount ]] ; do
-  echo -e "\n${LGREEN}AS number of ${NA}$(cat ns.txt | sed -n $(echo $num)p)\n"
-  whois -h whois.cymru.com $(cat nsip.txt | sed -n $(echo $num)p) 
-  num=$(($num + 1 ))
-done
 
-## NS name compare
-whois $var -H | grep -i 'Domain servers' -A 4 | grep -i 'Domain servers' -v | cut -d ' ' -f 7 | sort -u > whoisns
-if [[ $(echo -e $whoisns | wc -l) -eq 0 ]] ; then   # whois ns
-  whois $var -H | grep -i 'Name Server' | cut -d ' ' -f 6 | sort -u > whoisns
+# NS AS
+num=1
+while [[ $num -le $nscount ]] ; do
+  ns[$num]=$(dig -t ns $var | grep 'NS' | cut -d 'S' -f 2 | sort -u | sed -n $(echo $num)p)
+  nsip[$num]=$(dig -t a $(echo -e ${ns[$num]}) | cut -d 'A' -f 2)
+  echo -e "\n${LGREEN}AS number of ${NA}$(echo -e ${ns[$num]} | sed -n $(echo $num)p)\n"
+  whois -h whois.cymru.com $(echo ${nsip[$num]})
+  num=$(($num + 1 ))
+done      
+
+# NS name compare
+whoisns=$(whois $var -H | grep -i 'Domain servers' -A 4 | grep -i 'Domain servers' -v | cut -d ' ' -f 7 | sort -u)
+if [[ $(echo -e $whoisns | grep . | wc -l) -eq 0 ]] ; then   # whois ns
+  whoisns=$(whois $var -H | grep -i 'Name Server' | cut -d ' ' -f 6 | sort -u)
   if [[ $(echo -e $whoisns | wc -l ) -eq 0 ]] ; then
     echo -e "\n${RED}No Whois record \n ${NA}"
+  fi
 fi
-dig -t ns $var | grep 'NS' | cut -d 'S' -f 2 | sort -u > digns  # dig ns
-
-
+digns=$(dig -t ns $var | grep 'NS' | cut -d 'S' -f 2 | sort -u | sed s/'. '/' '/g | sed 's/.$//')  # dig ns
+whoisns=${whoisns,,}   # some whois profile is upper-case
+if [[ $(echo $whoisns) = $(echo $digns) ]] ; then
+  echo -e "\n${LGREEN}NS record configuration correct \n ${NA}"
+else
+  echo -e "\n${RED}NS record configuration incorrect \n ${NA}"
+fi
  
-## Registrar
+# Registrar
 echo -e "\n${LGREEN}Registrar Info \n${NA}"
 whois $var | sed s/'   R'/'R'/ | grep -w -E --no-ignore-case 'Registration Service'\|'Registrar:' | grep . | sort -u -f | head -n 1
