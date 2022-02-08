@@ -1,6 +1,6 @@
 #setup
 bash setup
-echo 'enter domain name'
+echo -e "enter domain name"
 read var
 echo $var > domain.txt
 dnsrecon -d $var -t std --lifetime 10 > stdtemp.txt
@@ -114,3 +114,8 @@ echo -e '\nEmail service \n'
 cat stdtemp.txt | grep 'MX' | cut -d ' ' -f 4 > mail.txt     #using same format to search email
 
 bash mailsearch          #run separate code
+
+#cleaning
+cat setup | grep touch | sed s/touch/rm/ > clean
+bash clean
+

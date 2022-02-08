@@ -53,7 +53,7 @@ fi
     whois $(cat unknown.txt) > whois.txt
     cat whois.txt | grep -w -E -i 'e-mail'| tail -n 1 | cut -d '@' -f 2 | cut -d ' ' -f 1 > mail.txt
     if [[ $(cat mail.txt | wc -l) -eq 0 ]] ; then
-    cat whois.txt | grep -F -A 1 'Administrative contact:'| tail -n 1 | cut -d '@' -f 2 | cut -d ' ' -f 1 > mail.txt
+    cat whois.txt | grep -A 1 'Administrative contact\|Administrator contact'| tail -n 1 | cut -d '@' -f 2 | cut -d ' ' -f 1 > mail.txt
     fi
     if [[ $(cat mail.txt | wc -l) -eq 0 ]] ; then
     cat whois.txt | grep --no-ignore-case 'Email:' | tail -n 1 | cut -d '@' -f 2 > mail.txt

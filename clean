@@ -1,0 +1,17 @@
+rm domian.txt
+rm stdtemp.txt
+rm domainip.txt
+rm nscount.txt
+rm nsip.txt
+rm regex.txt
+rm reconns.txt
+rm dsns.txt
+rm nsns.txt
+rm nscomp.txt
+rm nsipcount.txt
+rm nsipcomp.txt
+rm mail.txt
+rm unknown.txt
+rm whois.txt
+rm xmail.txt
+rm ~/.digrc
