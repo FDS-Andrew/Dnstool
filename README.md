@@ -5,6 +5,7 @@
 ## To install:
 
  bash prep.sh
+ 
  source ~/.bash_aliases
 ## To run command:
 
