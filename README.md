@@ -1,12 +1,13 @@
 # Dnstool
 
- Combining tools for Dns query
+Combining tools for Dns query
 
 ## To install:
 
- bash prep.sh
+bash prep.sh
  
- source ~/.bash_aliases
+source ~/.bash_aliases
+ 
 ## To run command:
 
- digdns
+digdns
