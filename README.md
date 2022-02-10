@@ -2,6 +2,6 @@
 ### Combining tools for Dns query
 
 ## To install:
-### bash prep
+### bash prep.sh
 ## To run command:
-### bash digdns
+### digdns
