@@ -2,7 +2,7 @@
 if [[ $(cat mail.txt | wc -l ) -eq 0 ]] ; then   #if not then try host -t mx
   host -t mx $(cat domain.txt) | grep 'has address' | cut -d ' ' -f 1 > mail.txt
   if [[ $(cat mail.txt | wc -l ) -gt 0 ]] ; then       #if there is mx record then run script again
-    bash mailsearch
+    bash mailsearch.sh
   fi
   if [[ $(cat mail.txt | wc -l ) -eq 0 ]] ; then     #if still no record exit script
     echo -e '  **No email record**'
@@ -64,7 +64,7 @@ fi
     echo -e '  **No email record in database**'
     else
     cat mail.txt > xmail.txt
-    bash mailsearch      #if there is result run script again
+    bash mailsearch.sh      #if there is result run script again
     fi
   fi
 fi
