@@ -1,4 +1,4 @@
-rm domian.txt
+rm domain.txt
 rm stdtemp.txt
 rm domainip.txt
 rm nscount.txt

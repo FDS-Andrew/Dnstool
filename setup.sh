@@ -2,7 +2,7 @@
 
 
 
-touch domian.txt
+touch domain.txt
 touch stdtemp.txt
 touch domainip.txt
 touch nscount.txt
