@@ -5,14 +5,14 @@ num=0
 RED='\033[0;31m'     # colorcode
 NA='\033[0m'
 LGREEN='\033[1;32m'
-reconvar=( A AAAA MX NS SRV TXT DS )  # trivial records
+reconvar=( A AAAA MX NS TXT DS )  # trivial records
 touch ~/.digrc  # dig format
 echo +nocmd +nocomments +nostats +noquestion +noauthority +noadditional +multiline > ~/.digrc
 
 # trivial search
 echo -e "${LGREEN}Please enter domain name${NA}"
 read var
-while [[ $num -le 6 ]] ; do 
+while [[ $num -le 5 ]] ; do 
   echo -e "\n${LGREEN}${reconvar[$num]} records:${NA}\n"
   if [[ $(dig $var -t $(echo ${reconvar[$num]}) | wc -l) -eq 0 ]] ; then
     echo -e "${RED}No ${reconvar[$num]} records${NA}"
@@ -20,6 +20,23 @@ while [[ $num -le 6 ]] ; do
     dig $var -t $(echo ${reconvar[$num]}) | grep "IN ${reconvar[$num]}"
   fi
   num=$(($num + 1 ))
+done
+
+# SOA search
+echo -e "\n${LGREEN}SOA records:${NA}\n"
+if [[ $(dig $var -t soa | wc -l) -eq 0 ]] ; then
+  echo -e "${RED}No SOA records${NA}"
+else
+  dig $var -t soa 
+fi
+
+#SRV record
+echo -e "\n${LGREEN}SRV records:${NA}\n"
+srvlist=$(cat srvlist.txt | wc -l)
+num=1
+while [[ num -le srvlist ]] ; do
+  dig -t srv $(echo $(cat srvlist.txt | sed -n $(echo $num)p)$var) | grep SRV
+  num=$(($num+1))
 done
 
 # AS & Country query
