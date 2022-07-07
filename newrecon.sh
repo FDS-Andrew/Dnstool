@@ -17,7 +17,7 @@ while [[ $num -le 5 ]] ; do
   if [[ $(dig $var -t $(echo ${reconvar[$num]}) | wc -l) -eq 0 ]] ; then
     echo -e "${RED}No ${reconvar[$num]} records${NA}"
   else
-    dig $var -t $(echo ${reconvar[$num]}) | grep "IN ${reconvar[$num]}"
+    dig $var -t $(echo ${reconvar[$num]}) | grep "${reconvar[$num]}"
   fi
   num=$(($num + 1 ))
 done
