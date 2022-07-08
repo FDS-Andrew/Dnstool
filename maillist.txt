@@ -1,0 +1,12 @@
+aspmx.l.google.com
+smtp.google.com
+gmail-smtp-in.l.google.com
+outlook.com
+hinet.net
+amazon.com
+yahoodns.net
+mailcloud.com
+mimecast.com
+messagelabs.com
+pphosted.com
+
