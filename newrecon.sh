@@ -92,3 +92,7 @@ done
 # Registrar
 echo -e "\n${LGREEN}Registrar Info \n${NA}"
 whois $var | sed s/'   R'/'R'/ | grep -w -E --no-ignore-case 'Registration Service'\|'Registrar:' | grep . | sort -u -f | head -n 1
+
+#Mail service
+echo -e "\n${LGREEN}Mail service \n${NA}"
+python3 mailsearchv2.py
