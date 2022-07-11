@@ -2,7 +2,7 @@
 
 # setup
 num=0
-RED='\033[0;31m'     # colorcode
+RED='\033[1;31m'     # colorcode
 NA='\033[0m'
 LGREEN='\033[1;32m'
 reconvar=( A AAAA MX NS TXT DS )  # trivial records
@@ -12,6 +12,7 @@ echo +nocmd +nocomments +nostats +noquestion +noauthority +noadditional +multili
 # trivial search
 echo -e "${LGREEN}Please enter domain name${NA}"
 read var
+echo $var > domainname.txt
 while [[ $num -le 5 ]] ; do 
   echo -e "\n${LGREEN}${reconvar[$num]} records:${NA}\n"
   if [[ $(dig $var -t $(echo ${reconvar[$num]}) | wc -l) -eq 0 ]] ; then
@@ -73,9 +74,9 @@ digns=$(dig -t ns $var | grep 'NS' | cut -d 'S' -f 2 | sort -u | sed s/'. '/' '/
 whoisns=${whoisns,,}   # some whois profile is upper-case
 digns=${digns,,}
 if [[ $(echo $whoisns) = $(echo $digns) ]] ; then
-  echo -e "\n${LGREEN}NS record configuration correct \n ${NA}"
+  echo -e "\n${LGREEN}NS record configuration correct  ${NA}"
 else
-  echo -e "\n${RED}NS record configuration incorrect \n ${NA}"
+  echo -e "\n${RED}NS record configuration incorrect  ${NA}"
 fi
  
 # NS ip compare
@@ -83,7 +84,7 @@ num=1
 while [[ $num -le $nscount ]] ; do
   num2=$(($num+1))
   if [[ $(echo -e ${nsip[$num]}) = $(echo -e ${nsip[$num2]}) ]] ; then
-    echo -e "\n${RED}NS nested in same IP\n${NA}"
+    echo -e "\n${RED}NS nested in same IP${NA}"
     num=$nscount 
   fi
   num=$(($num+1))
@@ -93,6 +94,3 @@ done
 echo -e "\n${LGREEN}Registrar Info \n${NA}"
 whois $var | sed s/'   R'/'R'/ | grep -w -E --no-ignore-case 'Registration Service'\|'Registrar:' | grep . | sort -u -f | head -n 1
 
-#Mail service
-echo -e "\n${LGREEN}Mail service \n${NA}"
-python3 mailsearchv2.py

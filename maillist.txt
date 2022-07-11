@@ -1,12 +1,11 @@
-aspmx.l.google.com
-smtp.google.com
-gmail-smtp-in.l.google.com
-outlook.com
-hinet.net
-amazon.com
-yahoodns.net
-mailcloud.com
-mimecast.com
-messagelabs.com
-pphosted.com
-
+aspmx.l.google.com Google_Workspace
+smtp.google.com Gmail
+gmail-smtp-in.l.google.com Gmail
+outlook.com Microsoft_Exchange_Online
+hinet.net HiNet_Mail
+amazon.com Amazon_SES
+yahoodns.net Yahoo!_Mail
+mailcloud.com Mailcloud
+mimecast.com Mimecast
+messagelabs.com Messagelabs
+pphosted.com ProofPoint
