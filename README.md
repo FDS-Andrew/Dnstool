@@ -11,9 +11,9 @@
 3. `bash prep.sh` *幫你裝dnsrecon，whois和python3*
 4. `source ~/.bash_aliases` *幫你建alias*
 ## 使用
-`digdns` *利用dnsrecon的database，功能完整，mailsearch已沒再更新*
-`newrecon` *沒用到dnsrecon，速度較快，不提供email資訊，srvlist.txt可再添加資料*
-`mailsearch` *用python找email service provider*
+1.`digdns` *利用dnsrecon的database，功能完整，mailsearch已沒再更新*
+2.`newrecon` *沒用到dnsrecon，速度較快，不提供email資訊，srvlist.txt可再添加資料*
+3.`mailsearch` *用python找email service provider*
 ## 備註
 > 1. :exclamation::exclamation: 不要改 **`~/.digrc`** 不然會炸開 *(若要自用 **dig** 請加 `-r` )*
 > 2. Email provider是另外跑`bash mailsearch.sh`扒出來的
