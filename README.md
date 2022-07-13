@@ -1,4 +1,4 @@
-# Dnstool教學 ![grade]([![Total alerts](https://img.shields.io/lgtm/alerts/g/FDS-Andrew/Dnstool.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/FDS-Andrew/Dnstool/alerts/))![linux](https://d33wubrfki0l68.cloudfront.net/e7ed9fe4bafe46e275c807d63591f85f9ab246ba/e2d28/assets/images/tux.png)
+# Dnstool教學 [![Language grade: Python](https://img.shields.io/lgtm/grade/python/g/FDS-Andrew/Dnstool.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/FDS-Andrew/Dnstool/context:python)![linux](https://d33wubrfki0l68.cloudfront.net/e7ed9fe4bafe46e275c807d63591f85f9ab246ba/e2d28/assets/images/tux.png)
 ## 功能
 1. 查A、AAAA、MX、NS、SRV、TXT、SOA、DS *(大部分 domain 都沒有)* records
 2. 查ASN和國家
