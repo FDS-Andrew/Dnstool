@@ -1,4 +1,4 @@
-# Digdns教學 ![linux](https://d33wubrfki0l68.cloudfront.net/e7ed9fe4bafe46e275c807d63591f85f9ab246ba/e2d28/assets/images/tux.png)
+# Dnstool教學 ![linux](https://d33wubrfki0l68.cloudfront.net/e7ed9fe4bafe46e275c807d63591f85f9ab246ba/e2d28/assets/images/tux.png)
 ## 功能
 1. 查A、AAAA、MX、NS、SRV、TXT、SOA、DS *(大部分 domain 都沒有)* records
 2. 查ASN和國家
@@ -8,11 +8,12 @@
 ## 安裝
 1. `git clone https://github.com/FDS-Andrew/Dnstool.git`
 2. `cd Dnstool`
-3. `bash prep.sh` *幫你裝dnsrecon和whois*
+3. `bash prep.sh` *幫你裝dnsrecon，whois和python3*
 4. `source ~/.bash_aliases` *幫你建alias*
 ## 使用
-`digdns` 
-然後輸入要查的domain
+`digdns` *利用dnsrecon的database，功能完整，mailsearch已沒再更新*
+`newrecon` *沒用到dnsrecon，速度較快，不提供email資訊，srvlist.txt可再添加資料*
+`mailsearch` *用python找email service provider*
 ## 備註
 > 1. :exclamation::exclamation: 不要改 **`~/.digrc`** 不然會炸開 *(若要自用 **dig** 請加 `-r` )*
 > 2. Email provider是另外跑`bash mailsearch.sh`扒出來的
