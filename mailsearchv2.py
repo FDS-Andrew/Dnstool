@@ -13,7 +13,7 @@ class MailSearch:
 
     def mail_list(self):
         # format mail_list
-        read = open("mail_list.txt", "r")
+        read = open("mail_list.txt", "r", encoding="utf-8")
         for line in read:
             split = line.split(" ")
             self.domain.extend([split[0]])
@@ -41,7 +41,7 @@ class MailSearch:
 
     def compare(self):
         # compare mx_name with mail_list
-        with open("mail_list.txt", "r") as file_path:
+        with open("mail_list.txt", "r", encoding="utf-8") as file_path:
             for count, line in enumerate(file_path):
                 pass
         count += 1
@@ -60,9 +60,9 @@ class MailSearch:
         num = 0
         while num < len(self.mx_ip):
             w = str(whois.whois(str(self.mx_ip[num])))
-            with open("whois.txt", "w") as blank:
+            with open("whois.txt", "w", encoding="utf-8") as blank:
                 blank.write(w)
-            with open("whois.txt", "r") as read:
+            with open("whois.txt", "r", encoding="utf-8") as read:
                 lines = read.readlines()
                 self.mx_name = lines[1].lower()
             self.compare()
