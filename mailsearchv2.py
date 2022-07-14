@@ -75,6 +75,8 @@ class MailSearch:
         # check if there's an answer, if not run whois_mail
         if self.ans != 1:
             self.whois_mail()
+            if self.ans != 1:
+                print("\n\033[1;31;40mNo Email Service in Database \n \033[0m")
 
 
 run = MailSearch()
