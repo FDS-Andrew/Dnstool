@@ -8,5 +8,5 @@ pip install dnspython --upgrade
 touch ~/.bash_aliases
 echo "alias digdns='bash digdns.sh'" >> ~/.bash_aliases
 echo "alias newrecon='bash newrecon.sh'" >> ~/.bash_aliases
-echo "alias mailsearch='python3 mailsearchv2.py'" >> ~/.bash_aliases
+echo "alias dnsquery='python3 dnsquery.py'" >> ~/.bash_aliases
 source ~/.bash_aliases
