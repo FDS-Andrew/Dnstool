@@ -429,7 +429,7 @@ shoutcast
 simmon
 simusoftpong
 sip
-sipfederation
+sipfederationtls
 sipuri
 sironaxray
 skype
