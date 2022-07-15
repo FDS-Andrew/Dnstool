@@ -107,7 +107,7 @@ class Search:
                 print("\033[1;31;40mNo "+self.query_list[num]+" Records \033[0m")
             num += 1
 
-    def ns_compare(self):
+    def whois_ns_compare(self):
         ans = 0
         try:
             w = str(whois.whois(self.var)).lower()
@@ -126,6 +126,26 @@ class Search:
         except Exception:
             print("\033[1;31;40mNo Whois record for comparison \033[0m")
 
+    def ns_ip_compare(self):
+        print("\n\033[1;32;40mEvaluating Name_Server IP \033[0m")
+        try:
+            ns = dns.resolver.resolve(self.var, "NS")
+            ip_list = set()
+            num = 0
+            for ns_data in ns:
+                name = str(ns_data)
+                a = dns.resolver.resolve(name, "A")
+                for a_data in a:
+                    string = re.sub(r".\d+$", "", str(a_data))
+                    ip_list.add(string)
+                    num += 1
+            if len(ip_list) != num:
+                print("\033[1;31;40mName_Server nested in same IP \033[0m")
+            else:
+                print("Name_Server IP configuration correct")
+        except Exception:
+            print("\033[1;31;40mNo NS records to evaluate \033[0m")
+
 
 class Steps:
     def __init__(self):
@@ -133,7 +153,8 @@ class Steps:
         run.mail_list()
         run.enter_domain()
         run.record_search()
-        run.ns_compare()
+        run.whois_ns_compare()
+        run.ns_ip_compare()
         run.mx_name_search()
         run.mail_ip()
         run.compare()
