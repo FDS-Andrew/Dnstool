@@ -37,6 +37,7 @@ class Search:
         self.var = input("\033[1;32;40mEnter domain name \n \033[0m")
 
     def mx_name_search(self):
+        # choosing the mail_server with the highest priority
         try:
             m = dns.resolver.resolve(self.var, self.query_list[3])
             mx_list = []
@@ -107,7 +108,34 @@ class Search:
                 print("\033[1;31;40mNo "+self.query_list[num]+" Records \033[0m")
             num += 1
 
+    def srv_search(self):
+        # search for srv records through index
+        print("\033[1;32;40mSearching for SRV Records, this may take awhile... \033[0m")
+        srv_list = []
+        srv_type = ["tcp", "udp", "tls"]
+        with open("srvlist.txt", "r", encoding="utf-8") as f:
+            for line in f:
+                split = line.split()
+                srv_list.extend(split)
+        count = 0
+        ans = 0
+        while count < len(srv_type):
+            num = 0
+            while num < len(srv_list):
+                try:
+                    record = dns.resolver.resolve("_"+srv_list[num]+"._"+srv_type[count]+"."+self.var, "SRV")
+                    for rdata in record:
+                        ans = 1
+                        print("\033[1;32;40m", srv_type[count], ":\033[0m ", rdata)
+                except Exception:
+                    pass
+                num += 1
+            count += 1
+        if ans != 1:
+            print("\033[1;31;40mNo SRV Records found \033[0m")
+
     def whois_ns_compare(self):
+        # check if whois record is correct
         ans = 0
         try:
             w = str(whois.whois(self.var)).lower()
@@ -127,6 +155,7 @@ class Search:
             print("\033[1;31;40mNo Whois record for comparison \033[0m")
 
     def ns_ip_compare(self):
+        # check if ns are nested in same ip
         print("\n\033[1;32;40mEvaluating Name_Server IP \033[0m")
         try:
             ns = dns.resolver.resolve(self.var, "NS")
@@ -159,6 +188,7 @@ class Steps:
         run.mail_ip()
         run.compare()
         run.check_ans()
+        run.srv_search()
 
 
 call_function = Steps()

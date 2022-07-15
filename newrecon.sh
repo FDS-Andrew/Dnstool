@@ -31,14 +31,7 @@ else
   dig $var -t soa 
 fi
 
-#SRV record
-echo -e "\n${LGREEN}SRV records:${NA}\n"
-srvlist=$(cat srvlist.txt | wc -l)
-num=1
-while [[ num -le srvlist ]] ; do
-  dig -t srv $(echo $(cat srvlist.txt | sed -n $(echo $num)p)$var) | grep SRV
-  num=$(($num+1))
-done
+#SRV Records
 
 # AS & Country query
 nscount=$(dig -t ns $var | grep 'NS' | wc -l)           # NS count
