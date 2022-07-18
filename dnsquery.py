@@ -35,7 +35,7 @@ class Search:
 
     def enter_domain(self):
         # input domain_name
-        self.var = input("\033[1;32;40mEnter domain name \n \033[0m")
+        self.var = input("\033[1;32;40mEnter domain name\033[0m\n")
 
     def mx_name_search(self):
         # choosing the mail_server with the highest priority
@@ -63,7 +63,7 @@ class Search:
         while num < count:
             if self.domain[num] in self.mx_name:
                 self.ans = 1
-                print("\n\033[1;32;40mEmail Exchange Service\033[0m")
+                print("\033[1;32;40mEmail Exchange Service\033[0m")
                 print(self.exchange[num])
                 break
             else:
@@ -184,16 +184,58 @@ class Search:
         with open("whois.txt", "r", encoding="utf-8") as f:
             lines = f.readlines()
             num = 0
+            ans = 0
         while num < len(lines):
             try:
                 x = re.search(r"\bregistrar\b", (lines[num])).groups()
                 if x == ():
-                    regi = re.sub(r'("registrar": )', '', lines[num])
+                    regi = re.sub(r'( "registrar": )', '', lines[num])
                     regi = re.sub(r",", '', regi)
-                    print(regi.upper())
+                    try:
+                        re.search("null", regi).groups()
+                        break
+                    except Exception:
+                        ans = 1
+                        print(regi.upper())
+                        break
             except Exception:
                 pass
             num += 1
+        if ans != 1:
+            print("\033[1;31;40mNo registrar found \n\033[0m")
+
+    def exp_date(self):
+        # expiration date
+        print("\033[1;32;40mExpiration date \033[0m")
+        with open("whois.txt", "r", encoding="utf-8") as f:
+            lines = f.readlines()
+            num = 0
+            ans = 0
+        while num < len(lines):
+            try:
+                x = re.search(r"\bexpiration_date\b", (lines[num])).groups()
+                if x == ():
+                    exp = re.sub(r'( "expiration_date": )', '', lines[num])
+                    exp = re.sub(r",", '', exp)
+                    try:
+                        re.search("null", exp).groups()
+                        break
+                    except Exception:
+                        ans = 1
+                    if "[" in exp:
+                        num += 1
+                        exp = re.sub(r'^\s*', '', lines[num])
+                        exp = re.sub(r",", '', exp)
+                        print(exp)
+                        break
+                    else:
+                        print(exp)
+                        break
+            except Exception:
+                pass
+            num += 1
+        if ans != 1:
+            print("\033[1;31;40mNo Expiration date found \033[0m")
 
     def as_search(self):
         pass
@@ -208,6 +250,7 @@ class Steps:
         run.whois_ns_compare()
         run.ns_ip_compare()
         run.regi_search()
+        run.exp_date()
         run.mx_name_search()
         run.mail_ip()
         run.compare()
