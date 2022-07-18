@@ -20,6 +20,7 @@ airport
 airprojector
 airsharing
 airsharingpro
+aix
 amba-cam
 amiphd-p2p
 animolmd
@@ -39,6 +40,7 @@ astnotify
 astralite
 async
 atlassianapp
+autodiscover
 av
 axis-video
 auth
@@ -62,8 +64,13 @@ bousg
 bri
 bsqdea
 busycal
+caldav
+caldavs
 caltalk
 cardsend
+carddav
+carddavs
+certificates
 cctv
 cheat
 chess
@@ -73,6 +80,9 @@ cip4discovery
 clipboard
 clique
 clscts
+crl
+crls
+cmp
 collection
 com-ocs-es-mcc
 contactserver
@@ -137,6 +147,7 @@ fairview
 faxstfx
 feed-sharing
 firetask
+finger
 fish
 fix
 fjork
@@ -157,6 +168,7 @@ fv-time
 garagepad
 gbs-smp
 gbs-stp
+gc
 gforce-ssmp
 glasspad
 glasspadserver
@@ -166,10 +178,15 @@ grillezvous
 growl
 guid
 h323
+h323be
+h323cs
+h323ls
 helix
 help
 hg
 hinz
+hkp
+hkps
 hmcp
 home-sharing
 homeauto
@@ -205,6 +222,7 @@ ii-drills
 ii-konane
 ilynx
 imap
+imaps
 imidi
 indigo-dvr
 inova-ontrack
@@ -224,12 +242,15 @@ itis-device
 itsrc
 ivef
 iwork
+jabber
+jabber-client
 jcan
 jeditx
 jini
 jtag
 kerberos
 kerberos-adm
+kpasswd
 ktp
 labyrinth
 lan2p
@@ -302,6 +323,7 @@ net2display
 netrestore
 newton-dock
 nfs
+nntp
 nssocketport
 ntlx-arch
 ntlx-ent
@@ -311,6 +333,7 @@ ntx
 obf
 objective
 oce
+ocsp
 od-master
 odabsharing
 odisk
@@ -341,13 +364,17 @@ pgpkey-http
 pgpkey-https
 pgpkey-ldap
 pgpkey-mailto
+pgpkeys
+pgprevokations
 photoparata
 pictua
 piesync
 piu
+pkixrep
 poch
 pokeeye
 pop3
+pop3s
 postgresql
 powereasy-erp
 powereasy-pos
@@ -430,7 +457,10 @@ simmon
 simusoftpong
 sip
 sipfederationtls
+sipinternal
+sipinternaltls
 sipuri
+sips
 sironaxray
 skype
 sleep-proxy
@@ -439,6 +469,7 @@ slimhttp
 smartenergy
 smb
 sms
+smtp
 soap
 socketcloud
 sox
@@ -461,6 +492,7 @@ stickynotes
 submission
 supple
 surveillus
+svcp
 svn
 swcards
 switcher
@@ -484,6 +516,7 @@ teleport
 telnet
 tera-fsmgr
 tera-mp
+test
 tf-redeye
 tftp
 thumbwrestling
@@ -534,6 +567,7 @@ webdavs
 webissync
 wedraw
 whamb
+whois
 whistler
 wired
 witap
@@ -552,6 +586,8 @@ wtc-wpr
 wwdcpic
 x-on
 x-plane9
+x-puppet
+x-puppet-ca
 xcodedistcc
 xgate-rmi
 xgrid
