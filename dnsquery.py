@@ -91,7 +91,7 @@ class Dnsquery:
         except Exception:
             pass
 
-    def check_ans(self):
+    def check_whois_ans(self):
         # check if there's an answer, if not run whois_mail
         if self.ans != 1:
             self.whois_mail()
@@ -130,7 +130,7 @@ class Dnsquery:
                     record = dns.resolver.resolve("_"+srv_list[num]+"._"+srv_type[count]+"."+self.var, "SRV")
                     for rdata in record:
                         ans = 1
-                        print("\033[1;32;40m", srv_type[count], ":\033[0m ", rdata)
+                        print("\033[1;33;40m", srv_type[count], ":\033[0m", rdata)
                 except Exception:
                     pass
                 num += 1
@@ -154,7 +154,7 @@ class Dnsquery:
                     print("\033[1;31;40mWhois name_server records misconfiguration \033[0m")
                     break
             if ans == 0:
-                print("Whois name_server records correct")
+                print("\033[1;33;40mWhois name_server records correct\033[0m")
         except Exception:
             print("\033[1;31;40mNo Whois record for comparison \033[0m")
 
@@ -175,7 +175,7 @@ class Dnsquery:
             if len(ip_set) != num:
                 print("\033[1;31;40mName_Server nested in same IP \033[0m")
             else:
-                print("Name_Server IP configuration correct\n")
+                print("\033[1;33;40mName_Server IP configuration correct\033[0m\n")
         except Exception:
             print("\033[1;31;40mNo NS records to evaluate \033[0m")
 
@@ -195,11 +195,11 @@ class Dnsquery:
                 net = Net(ip_list[num])
                 obj = IPASN(net)
                 results = obj.lookup()
-                print("\033[1;32;40mASN info of \033[0m",ip_list[num])
-                print("\033[1;34;40m ASN:\033[0m", results['asn'], '|', "\033[1;34;40mCountry:\033[0m", results['asn_country_code'], '|', "\033[1;34;40mASN registry:\033[0m", results['asn_registry'].upper(), '|', "\033[1;34;40mDescription:\033[0m", results['asn_description'])
+                print("\033[1;32;40mASN info of \033[0m", ip_list[num])
+                print("\033[1;33;40m ASN:\033[0m", results['asn'], '|', "\033[1;33;40mCountry:\033[0m", results['asn_country_code'], '|', "\033[1;33;40mASN registry:\033[0m", results['asn_registry'].upper(), '|', "\033[1;33;40mDescription:\033[0m", results['asn_description'])
                 num += 1
         except Exception:
-            print("\033[1;31;40mNo ASN records\033[0m")
+            print("\n\033[1;31;40mNo ASN records\033[0m")
 
     def regi_search(self):
         # registrar search
@@ -264,22 +264,23 @@ class Dnsquery:
 
 
 class Steps:
-    def search(self):
+    def __init__(self):
         run = Dnsquery()
         run.mail_list()
         run.enter_domain()
         run.record_search()
+        # ns
         run.whois_ns_compare()
         run.ns_ip_compare()
         run.as_search()
         run.regi_search()
         run.exp_date()
+        # mail
         run.mx_name_search()
         run.mail_ip()
         run.compare()
-        run.check_ans()
+        run.check_whois_ans()
         run.srv_search()
 
 
 call_function = Steps()
-call_function.search()
