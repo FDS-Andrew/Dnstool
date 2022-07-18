@@ -13,6 +13,7 @@ class Search:
         self.ans = 0
         self.mx_name = ''
         self.var = ''
+        self.whois = ''
 
     def mail_list(self):
         # format mail_list
@@ -138,12 +139,12 @@ class Search:
         # check if whois record is correct
         ans = 0
         try:
-            w = str(whois.whois(self.var)).lower()
+            self.whois = str(whois.whois(self.var)).lower()
             print("\n\033[1;32;40mComparing Whois name_server records \033[0m")
             record = dns.resolver.resolve(self.var, "NS")
             for rdata in record:
                 pattern = str(rdata)
-                if re.search(pattern, w):
+                if re.search(pattern, self.whois):
                     pass
                 else:
                     ans = 1
@@ -175,6 +176,28 @@ class Search:
         except Exception:
             print("\033[1;31;40mNo NS records to evaluate \033[0m")
 
+    def regi_search(self):
+        # registrar search
+        print("\n\033[1;32;40mRegistrar \033[0m")
+        with open("whois.txt", "w", encoding="utf-8") as f:
+            f.write(self.whois)
+        with open("whois.txt", "r", encoding="utf-8") as f:
+            lines = f.readlines()
+            num = 0
+        while num < len(lines):
+            try:
+                x = re.search(r"\bregistrar\b", (lines[num])).groups()
+                if x == ():
+                    regi = re.sub(r'("registrar": )', '', lines[num])
+                    regi = re.sub(r",", '', regi)
+                    print(regi.upper())
+            except Exception:
+                pass
+            num += 1
+
+    def as_search(self):
+        pass
+
 
 class Steps:
     def __init__(self):
@@ -184,6 +207,7 @@ class Steps:
         run.record_search()
         run.whois_ns_compare()
         run.ns_ip_compare()
+        run.regi_search()
         run.mx_name_search()
         run.mail_ip()
         run.compare()
