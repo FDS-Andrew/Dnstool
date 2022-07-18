@@ -1,4 +1,4 @@
-# Dnstool教學 [![Language grade: Python](https://img.shields.io/lgtm/grade/python/g/FDS-Andrew/Dnstool.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/FDS-Andrew/Dnstool/context:python)
+# Dnstool [![Language grade: Python](https://img.shields.io/lgtm/grade/python/g/FDS-Andrew/Dnstool.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/FDS-Andrew/Dnstool/context:python)
 ## 功能
 1. 查A、AAAA、MX、NS、SRV、TXT、SOA、DS *(大部分 domain 都沒有)* records
 2. 查ASN和國家
@@ -12,7 +12,7 @@
 4. `source ~/.bash_aliases` *幫你建alias*
 ## 使用
 1. `digdns` *利用dnsrecon的database，功能完整，mailsearch已沒再更新*
-2. `newrecon` *沒用到dnsrecon，速度較快，不提供email資訊，srvlist.txt可再添加資料*
+2. `newrecon` *沒用到dnsrecon，速度較快，不提供email資訊*
 3. `dnsquery` *一樣的功能不過是用python寫的*
 ## 備註
 > 1. :exclamation::exclamation: 不要改 **`~/.digrc`** 不然會炸開 *(若要自用 **dig** 請加 `-r` )*
@@ -22,4 +22,4 @@
 > 5. **`newrecon.sh`** 這個shell是重寫的，目的是減少電腦負擔及加速過程，且大幅減少txt檔的使用率
 > 6. 如果不需要**email provider**資訊的話可以跑 `newrecon` 跑得快很多 *(因為沒用到 **dnsrecon**)*
 > 7. 如果跑不出資料請先 `ping <domain_name> -c <看你要ping幾次>` 來確定連不連的到domain 
-> 8. 如果要追加 **common srv service** 可以改 **srvlist.txt** 且不用改 `newrecon.sh`
+> 8. 如果要追加 **common srv service** 可以改 **srvlist.txt**
