@@ -1,15 +1,18 @@
+from ipwhois.net import Net
+from ipwhois.asn import IPASN
 import whois
 import dns.resolver
 import re
 
 
-class Search:
+class Dnsquery:
     def __init__(self):
         # import variables
         self.query_list = ["A", "AAAA", "NS", "MX", "TXT", "SOA"]
         self.mx_ip = []
         self.domain = []
         self.exchange = []
+        self.ip_list = []
         self.ans = 0
         self.mx_name = ''
         self.var = ''
@@ -160,21 +163,43 @@ class Search:
         print("\n\033[1;32;40mEvaluating Name_Server IP \033[0m")
         try:
             ns = dns.resolver.resolve(self.var, "NS")
-            ip_list = set()
             num = 0
+            ip_set = set()
             for ns_data in ns:
                 name = str(ns_data)
                 a = dns.resolver.resolve(name, "A")
                 for a_data in a:
                     string = re.sub(r".\d+$", "", str(a_data))
-                    ip_list.add(string)
+                    ip_set.add(string)
                     num += 1
-            if len(ip_list) != num:
+            if len(ip_set) != num:
                 print("\033[1;31;40mName_Server nested in same IP \033[0m")
             else:
-                print("Name_Server IP configuration correct")
+                print("Name_Server IP configuration correct\n")
         except Exception:
             print("\033[1;31;40mNo NS records to evaluate \033[0m")
+
+    def as_search(self):
+        # ASN info search
+        ip_list = set()
+        try:
+            ns = dns.resolver.resolve(self.var, "NS")
+            for ns_data in ns:
+                name = str(ns_data)
+                a = dns.resolver.resolve(name, "A")
+                for a_data in a:
+                    ip_list.add(str(a_data))
+            ip_list = list(ip_list)
+            num = 0
+            while num < len(ip_list):
+                net = Net(ip_list[num])
+                obj = IPASN(net)
+                results = obj.lookup()
+                print("\033[1;32;40mASN info of \033[0m",ip_list[num])
+                print("\033[1;34;40m ASN:\033[0m", results['asn'], '|', "\033[1;34;40mCountry:\033[0m", results['asn_country_code'], '|', "\033[1;34;40mASN registry:\033[0m", results['asn_registry'].upper(), '|', "\033[1;34;40mDescription:\033[0m", results['asn_description'])
+                num += 1
+        except Exception:
+            print("\033[1;31;40mNo ASN records\033[0m")
 
     def regi_search(self):
         # registrar search
@@ -237,18 +262,16 @@ class Search:
         if ans != 1:
             print("\033[1;31;40mNo Expiration date found \033[0m")
 
-    def as_search(self):
-        pass
-
 
 class Steps:
-    def __init__(self):
-        run = Search()
+    def search(self):
+        run = Dnsquery()
         run.mail_list()
         run.enter_domain()
         run.record_search()
         run.whois_ns_compare()
         run.ns_ip_compare()
+        run.as_search()
         run.regi_search()
         run.exp_date()
         run.mx_name_search()
@@ -259,3 +282,4 @@ class Steps:
 
 
 call_function = Steps()
+call_function.search()
