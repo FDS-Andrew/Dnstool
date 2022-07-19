@@ -2,7 +2,7 @@
 ## 功能
 1. 查A、AAAA、MX、NS、SRV、TXT、SOA、DS *(大部分 domain 都沒有)* records
 2. 查ASN和國家
-3. 查EmailProvider、ISP *(Registrar)*和網域到期日
+3. 查EmailProvider、ISP *(Registrar)* 和網域到期日
 4. 比較Whois的NS名字有沒有設錯 *(若 NS 中有 record 設錯會有 ***warning***)* 
 5. 比較NS的IP有沒有放在同一個地方
 ## 安裝
