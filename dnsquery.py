@@ -1,5 +1,6 @@
 from ipwhois.net import Net
 from ipwhois.asn import IPASN
+import threading
 import whois
 import dns.resolver
 import re
@@ -13,19 +14,11 @@ class Dnsquery:
         self.domain = []
         self.exchange = []
         self.ip_list = []
+        self.srv_list = []
         self.ans = 0
         self.mx_name = ''
         self.var = ''
         self.whois = ''
-
-    def mail_list(self):
-        # format mail_list
-        read = open("mail_list.txt", "r", encoding="utf-8")
-        for line in read:
-            split = line.split(" ")
-            self.domain.extend([split[0]])
-            self.exchange.extend([split[1]])
-        read.close()
 
     def mail_ip(self):
         # find mail_server ip
@@ -112,31 +105,54 @@ class Dnsquery:
                 print("\033[1;31;40mNo "+self.query_list[num]+" Records \033[0m")
             num += 1
 
-    def srv_search(self):
-        # search for srv records through index
-        print("\033[1;32;40mSearching for SRV Records, this may take awhile... \033[0m")
-        srv_list = []
-        srv_type = ["tcp", "udp", "tls"]
+    def list(self):
+        # format srv_list
         with open("srvlist.txt", "r", encoding="utf-8") as f:
             for line in f:
                 split = line.split()
-                srv_list.extend(split)
-        count = 0
-        ans = 0
-        while count < len(srv_type):
-            num = 0
-            while num < len(srv_list):
-                try:
-                    record = dns.resolver.resolve("_"+srv_list[num]+"._"+srv_type[count]+"."+self.var, "SRV")
-                    for rdata in record:
-                        ans = 1
-                        print("\033[1;33;40m", srv_type[count], ":\033[0m", rdata)
-                except Exception:
-                    pass
-                num += 1
-            count += 1
-        if ans != 1:
-            print("\033[1;31;40mNo SRV Records found \033[0m")
+                self.srv_list.extend(split)
+        # format mail_list
+        with open("mail_list.txt", "r", encoding="utf-8") as read:
+            for line in read:
+                split = line.split(" ")
+                self.domain.extend([split[0]])
+                self.exchange.extend([split[1]])
+
+    def srv_tcp(self):
+        # search for srv records with tcp
+        num = 0
+        while num < len(self.srv_list):
+            try:
+                record = dns.resolver.resolve("_"+self.srv_list[num]+"._tcp."+self.var, "SRV")
+                for rdata in record:
+                    print("\033[1;33;40mTCP:\033[0m", rdata)
+            except Exception:
+                pass
+            num += 1
+
+    def srv_tls(self):
+        # search for srv records with tls
+        num = 0
+        while num < len(self.srv_list):
+            try:
+                record = dns.resolver.resolve("_"+self.srv_list[num]+"._tls."+self.var, "SRV")
+                for rdata in record:
+                    print("\033[1;33;40mTLS:\033[0m", rdata)
+            except Exception:
+                pass
+            num += 1
+
+    def srv_udp(self):
+        # search for srv records with udp
+        num = 0
+        while num < len(self.srv_list):
+            try:
+                record = dns.resolver.resolve("_"+self.srv_list[num]+"._udp."+self.var, "SRV")
+                for rdata in record:
+                    print("\033[1;33;40mUDP:\033[0m", rdata)
+            except Exception:
+                pass
+            num += 1
 
     def whois_ns_compare(self):
         # check if whois record is correct
@@ -266,21 +282,26 @@ class Dnsquery:
 class Steps:
     def __init__(self):
         run = Dnsquery()
-        run.mail_list()
         run.enter_domain()
+        run.list()
         run.record_search()
-        # ns
         run.whois_ns_compare()
         run.ns_ip_compare()
         run.as_search()
         run.regi_search()
         run.exp_date()
-        # mail
         run.mx_name_search()
         run.mail_ip()
         run.compare()
         run.check_whois_ans()
-        run.srv_search()
+        print("\033[1;32;40mSearching for SRV Records, this may take awhile... \033[0m")
+        if __name__ == "__main__":
+            p1 = threading.Thread(target=run.srv_tcp)
+            p1.start()
+            p2 = threading.Thread(target=run.srv_tls)
+            p2.start()
+            p3 = threading.Thread(target=run.srv_udp)
+            p3.start()
 
 
 call_function = Steps()
