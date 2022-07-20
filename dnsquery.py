@@ -7,18 +7,22 @@ import re
 
 
 class Dnsquery:
-    def __init__(self):
-        # import variables
-        self.query_list = ["A", "AAAA", "NS", "MX", "TXT", "SOA"]
-        self.mx_ip = []
-        self.domain = []
-        self.exchange = []
-        self.ip_list = []
-        self.srv_list = []
-        self.ans = 0
-        self.mx_name = ''
-        self.var = ''
-        self.whois = ''
+    # import variables
+    query_list = ["A", "AAAA", "NS", "MX", "TXT", "SOA"]
+    mx_ip = []
+    domain = []
+    exchange = []
+    ip_list = []
+    srv_list = []
+    ans = 0
+    error = 0
+    G = "\033[1;32;40m"
+    R = "\033[1;31;40m"
+    Y = "\033[1;33;40m"
+    N = "\033[0m"
+    mx_name = ''
+    var = ''
+    whois = ''
 
     def mail_ip(self):
         # find mail_server ip
@@ -31,7 +35,7 @@ class Dnsquery:
 
     def enter_domain(self):
         # input domain_name
-        self.var = input("\033[1;32;40mEnter domain name\033[0m\n")
+        self.var = input(self.G+"Enter domain name"+self.N+"\n")
 
     def mx_name_search(self):
         # choosing the mail_server with the highest priority
@@ -47,7 +51,7 @@ class Dnsquery:
             self.mx_name = str(mx_list[(pref_list.index(min(pref_list)))])
         except Exception:
             self.ans = 1
-            print("\n\033[1;31;40mNo Email Service\033[0m")
+            print(self.R+"\nNo Email Service"+self.N)
 
     def compare(self):
         # compare mx_name with mail_list
@@ -59,7 +63,7 @@ class Dnsquery:
         while num < count:
             if self.domain[num] in self.mx_name:
                 self.ans = 1
-                print("\033[1;32;40mEmail Exchange Service\033[0m")
+                print(self.G+"Email Exchange Service"+self.N)
                 print(self.exchange[num])
                 break
             else:
@@ -84,25 +88,17 @@ class Dnsquery:
         except Exception:
             pass
 
-    def check_whois_ans(self):
-        # check if there's an answer, if not run whois_mail
-        if self.ans != 1:
-            self.whois_mail()
-            if self.ans != 1:
-                print("\n\033[1;32;40mEmail Exchange Service\033[0m")
-                print("\033[1;31;40mNo Email Service in Database \n \033[0m")
-
     def record_search(self):
         # search for A, AAAA, NS, MX, TXT, SOA
         num = 0
         while num < len(self.query_list):
-            print("\n\033[1;32;40m"+self.query_list[num]+" Records \033[0m")
+            print("\n"+self.G+self.query_list[num]+" Records"+self.N)
             try:
                 record = dns.resolver.resolve(self.var, self.query_list[num])
                 for rdata in record:
                     print(rdata)
             except Exception:
-                print("\033[1;31;40mNo "+self.query_list[num]+" Records \033[0m")
+                print(self.R+"No "+self.query_list[num]+" Records"+self.N)
             num += 1
 
     def list(self):
@@ -120,46 +116,40 @@ class Dnsquery:
 
     def srv_tcp(self):
         # search for srv records with tcp
-        num = 0
-        while num < len(self.srv_list):
+        for n in range(len(self.srv_list)):
             try:
-                record = dns.resolver.resolve("_"+self.srv_list[num]+"._tcp."+self.var, "SRV")
-                for rdata in record:
-                    print("\033[1;33;40mTCP:\033[0m", rdata)
+                record = dns.resolver.resolve("_"+self.srv_list[n]+"._tcp."+self.var, "SRV")
+                for data in record:
+                    print(self.Y+"TCP:"+self.N, data)
             except Exception:
                 pass
-            num += 1
 
     def srv_tls(self):
         # search for srv records with tls
-        num = 0
-        while num < len(self.srv_list):
+        for n in range(len(self.srv_list)):
             try:
-                record = dns.resolver.resolve("_"+self.srv_list[num]+"._tls."+self.var, "SRV")
-                for rdata in record:
-                    print("\033[1;33;40mTLS:\033[0m", rdata)
+                record = dns.resolver.resolve("_"+self.srv_list[n]+"._tls."+self.var, "SRV")
+                for data in record:
+                    print(self.Y+"TLS:"+self.N, data)
             except Exception:
                 pass
-            num += 1
 
     def srv_udp(self):
         # search for srv records with udp
-        num = 0
-        while num < len(self.srv_list):
+        for n in range(len(self.srv_list)):
             try:
-                record = dns.resolver.resolve("_"+self.srv_list[num]+"._udp."+self.var, "SRV")
-                for rdata in record:
-                    print("\033[1;33;40mUDP:\033[0m", rdata)
+                record = dns.resolver.resolve("_"+self.srv_list[n]+"._udp."+self.var, "SRV")
+                for data in record:
+                    print(self.Y+"UDP:"+self.N, data)
             except Exception:
                 pass
-            num += 1
 
     def whois_ns_compare(self):
         # check if whois record is correct
         ans = 0
         try:
             self.whois = str(whois.whois(self.var)).lower()
-            print("\n\033[1;32;40mComparing Whois name_server records \033[0m")
+            print(self.G+"\nComparing Whois name_server records"+self.N)
             record = dns.resolver.resolve(self.var, "NS")
             for rdata in record:
                 pattern = str(rdata)
@@ -167,16 +157,17 @@ class Dnsquery:
                     pass
                 else:
                     ans = 1
-                    print("\033[1;31;40mWhois name_server records misconfiguration \033[0m")
+                    print(self.R+"Whois name_server records misconfiguration"+self.N)
                     break
             if ans == 0:
-                print("\033[1;33;40mWhois name_server records correct\033[0m")
+                print(self.Y+"Whois name_server records correct"+self.N)
         except Exception:
-            print("\033[1;31;40mNo Whois record for comparison \033[0m")
+            self.error = 1
+            print(self.R+"No Whois record for comparison"+self.N)
 
     def ns_ip_compare(self):
         # check if ns are nested in same ip
-        print("\n\033[1;32;40mEvaluating Name_Server IP \033[0m")
+        print(self.G+"\nEvaluating Name_Server IP"+self.N)
         try:
             ns = dns.resolver.resolve(self.var, "NS")
             num = 0
@@ -189,11 +180,11 @@ class Dnsquery:
                     ip_set.add(string)
                     num += 1
             if len(ip_set) != num:
-                print("\033[1;31;40mName_Server nested in same IP \033[0m")
+                print(self.R+"Name_Server nested in same IP"+self.N)
             else:
-                print("\033[1;33;40mName_Server IP configuration correct\033[0m\n")
+                print(self.Y+"Name_Server IP configuration correct\n"+self.N)
         except Exception:
-            print("\033[1;31;40mNo NS records to evaluate \033[0m")
+            print(self.R+"No NS records to evaluate"+self.N)
 
     def as_search(self):
         # ASN info search
@@ -211,15 +202,15 @@ class Dnsquery:
                 net = Net(ip_list[num])
                 obj = IPASN(net)
                 results = obj.lookup()
-                print("\033[1;32;40mASN info of \033[0m", ip_list[num])
-                print("\033[1;33;40m ASN:\033[0m", results['asn'], '|', "\033[1;33;40mCountry:\033[0m", results['asn_country_code'], '|', "\033[1;33;40mASN registry:\033[0m", results['asn_registry'].upper(), '|', "\033[1;33;40mDescription:\033[0m", results['asn_description'])
+                print(self.G+"ASN info of "+self.N, ip_list[num])
+                print(self.Y+" ASN:"+self.N, results['asn'], '|', self.Y+"Country:"+self.N, results['asn_country_code'], '|', self.Y+"ASN registry:"+self.N, results['asn_registry'].upper(), '|', self.Y+"Description:"+self.N, results['asn_description'])
                 num += 1
         except Exception:
-            print("\n\033[1;31;40mNo ASN records\033[0m")
+            print(self.R+"\nNo ASN records"+self.N)
 
     def regi_search(self):
         # registrar search
-        print("\n\033[1;32;40mRegistrar \033[0m")
+        print(self.G+"\nRegistrar "+self.N)
         with open("whois.txt", "w", encoding="utf-8") as f:
             f.write(self.whois)
         with open("whois.txt", "r", encoding="utf-8") as f:
@@ -243,11 +234,11 @@ class Dnsquery:
                 pass
             num += 1
         if ans != 1:
-            print("\033[1;31;40mNo registrar found \n\033[0m")
+            print(self.R+"No registrar found \n"+self.N)
 
     def exp_date(self):
         # expiration date
-        print("\033[1;32;40mExpiration date \033[0m")
+        print(self.G+"Expiration date "+self.N)
         with open("whois.txt", "r", encoding="utf-8") as f:
             lines = f.readlines()
             num = 0
@@ -276,7 +267,7 @@ class Dnsquery:
                 pass
             num += 1
         if ans != 1:
-            print("\033[1;31;40mNo Expiration date found \033[0m")
+            print(self.R+"No Expiration date found "+self.N)
 
 
 class Steps:
@@ -293,15 +284,25 @@ class Steps:
         run.mx_name_search()
         run.mail_ip()
         run.compare()
-        run.check_whois_ans()
-        print("\033[1;32;40mSearching for SRV Records, this may take awhile... \033[0m")
-        if __name__ == "__main__":
-            p1 = threading.Thread(target=run.srv_tcp)
-            p1.start()
-            p2 = threading.Thread(target=run.srv_tls)
-            p2.start()
-            p3 = threading.Thread(target=run.srv_udp)
-            p3.start()
-
+        if run.ans != 1:
+            run.whois_mail()
+            if run.ans != 1:
+                print(run.G+"\nEmail Exchange Service"+run.N)
+                print(run.R+"No Email Service in Database\n"+run.N)
+        if run.error == 1:
+            print(run.R+"\nDomain does not exist"+run.N)
+        else:
+            print(run.G+"Brute forcing SRV Records, this may take awhile..."+run.N)
+            if __name__ == "__main__":
+                p1 = threading.Thread(target=run.srv_tcp)
+                p1.start()
+                p2 = threading.Thread(target=run.srv_tls)
+                p2.start()
+                p3 = threading.Thread(target=run.srv_udp)
+                p3.start()
+                p1.join()
+                p2.join()
+                p3.join()
+                
 
 call_function = Steps()
