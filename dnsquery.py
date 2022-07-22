@@ -71,8 +71,7 @@ class Dnsquery:
 
     def whois_mail(self):
         # running whois on mx_ip
-        num = 0
-        while num < len(self.mx_ip):
+        for num in range(len(self.mx_ip)):
             w = str(whois.whois(str(self.mx_ip[num])))
             with open("whois.txt", "w", encoding="utf-8") as blank:
                 blank.write(w)
@@ -82,8 +81,6 @@ class Dnsquery:
                 self.compare()
             if self.ans == 1:
                 break
-            else:
-                num += 1
 
     def record_search(self):
         # search for A, AAAA, NS, MX, TXT, SOA
@@ -167,7 +164,7 @@ class Dnsquery:
         print(self.G+"\nEvaluating Name_Server IP"+self.N)
         try:
             ns = dns.resolver.resolve(self.var, "NS")
-            num = 0
+            ip_num = 0
             ip_set = set()
             for ns_data in ns:
                 name = str(ns_data)
@@ -175,8 +172,8 @@ class Dnsquery:
                 for a_data in a:
                     string = re.sub(r".\d+$", "", str(a_data))
                     ip_set.add(string)
-                    num += 1
-            if len(ip_set) != num:
+                    ip_num += 1
+            if len(ip_set) != ip_num:
                 print(self.R+"Name_Server nested in same IP\n"+self.N)
             else:
                 print(self.Y+"Name_Server IP configuration correct\n"+self.N)
@@ -194,14 +191,12 @@ class Dnsquery:
                 for a_data in a:
                     ip_list.add(str(a_data))
             ip_list = list(ip_list)
-            num = 0
-            while num < len(ip_list):
+            for num in range(len(ip_list)):
                 net = Net(ip_list[num])
                 obj = IPASN(net)
                 results = obj.lookup()
                 print(self.G+"ASN info of "+self.N, ip_list[num])
                 print(self.Y+" ASN:"+self.N, results['asn'], '|', self.Y+"Country:"+self.N, results['asn_country_code'], '|', self.Y+"ASN registry:"+self.N, results['asn_registry'].upper(), '|', self.Y+"Description:"+self.N, results['asn_description'])
-                num += 1
         except dns.resolver.NoAnswer:
             print(self.R+"\nNo ASN records"+self.N)
 
@@ -212,9 +207,8 @@ class Dnsquery:
             f.write(self.whois)
         with open("whois.txt", "r", encoding="utf-8") as f:
             lines = f.readlines()
-            num = 0
             ans = 0
-        while num < len(lines):
+        for num in range(len(lines)):
             try:
                 x = re.search(r"\bregistrar\b", (lines[num])).groups()
                 if x == ():
@@ -229,7 +223,6 @@ class Dnsquery:
                         break
             except AttributeError:
                 pass
-            num += 1
         if ans != 1:
             print(self.R+"No registrar found \n"+self.N)
 
