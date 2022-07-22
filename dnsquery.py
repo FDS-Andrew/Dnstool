@@ -34,10 +34,6 @@ class Dnsquery:
         except dns.resolver.NoAnswer:
             pass
 
-    '''def enter_domain(self):
-        # input domain_name
-        self.var = input(self.G+"Enter domain name"+self.N+"\n")'''
-
     def mx_name_search(self):
         # choosing the mail_server with the highest priority
         try:
@@ -356,5 +352,8 @@ def query(var, query_type):
         run.exp_date()
     elif query_type == "asn":
         run.as_search()
+    elif query_type == "eva":
+        run.whois_ns_compare()
+        run.ns_ip_compare()
     print(run.G+"Finished query\n"+run.N)
     sys.exit()

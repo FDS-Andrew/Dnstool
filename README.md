@@ -22,6 +22,7 @@
 5. **asn:** ASN
 6. **reg:** Registrar(註冊商)
 7. **exp:** Expiration date(網域到期日)
+8. **eva:** Whois NS evaluation和DNS IP evaluation
 ## 備註
 > 1. 若要用digdns不要改 **`~/.digrc`** *(若要自用 **dig** 請加 `-r` )*
 > 2. 若不使用python可用`digdns`或`newrecon` 
