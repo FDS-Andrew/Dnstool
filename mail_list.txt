@@ -10,4 +10,3 @@ mimecast.com Mimecast
 messagelabs.com Messagelabs
 pphosted.com ProofPoint
 chinamobile.com 中國移動
-dongguan.gd.cn 東莞網
