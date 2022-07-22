@@ -1,5 +1,6 @@
 from ipwhois.net import Net
 from ipwhois.asn import IPASN
+import sys
 import threading
 import whois
 import dns.resolver
@@ -33,9 +34,9 @@ class Dnsquery:
         except dns.resolver.NoAnswer:
             pass
 
-    def enter_domain(self):
+    '''def enter_domain(self):
         # input domain_name
-        self.var = input(self.G+"Enter domain name"+self.N+"\n")
+        self.var = input(self.G+"Enter domain name"+self.N+"\n")'''
 
     def mx_name_search(self):
         # choosing the mail_server with the highest priority
@@ -121,6 +122,10 @@ class Dnsquery:
                     print(self.Y+"TCP:"+self.N, data)
             except dns.resolver.NXDOMAIN:
                 pass
+            except dns.exception.Timeout:
+                pass
+            except dns.resolver.NoAnswer:
+                pass
 
     def srv_tls(self):
         # search for srv records with tls
@@ -131,6 +136,10 @@ class Dnsquery:
                     print(self.Y+"TLS:"+self.N, data)
             except dns.resolver.NXDOMAIN:
                 pass
+            except dns.exception.Timeout:
+                pass
+            except dns.resolver.NoAnswer:
+                pass
 
     def srv_udp(self):
         # search for srv records with udp
@@ -140,6 +149,10 @@ class Dnsquery:
                 for data in record:
                     print(self.Y+"UDP:"+self.N, data)
             except dns.resolver.NXDOMAIN:
+                pass
+            except dns.exception.Timeout:
+                pass
+            except dns.resolver.NoAnswer:
                 pass
 
     def whois_ns_compare(self):
@@ -260,11 +273,29 @@ class Dnsquery:
             print(self.R+"No Expiration date found "+self.N)
 
 
-class Steps:
-    def __init__(self):
-        run = Dnsquery()
-        run.enter_domain()
-        run.list()
+def query(var, query_type):
+    run = Dnsquery()
+    run.var = var
+    run.list()
+    if query_type == "std":
+        run.record_search()
+        if run.error != 1:
+            run.whois_ns_compare()
+            run.ns_ip_compare()
+            run.as_search()
+            run.regi_search()
+            run.exp_date()
+            run.mx_name_search()
+            run.mail_ip()
+            run.compare()
+            if run.ans != 1:
+                run.whois_mail()
+                if run.ans != 1:
+                    print(run.G+"\nEmail Exchange Service"+run.N)
+                    print(run.R+"No Email Service in Database\n"+run.N)
+        else:
+            print(run.R+"\nDomain does not exist"+run.N)
+    elif query_type == "all":
         run.record_search()
         if run.error != 1:
             run.whois_ns_compare()
@@ -284,7 +315,7 @@ class Steps:
                 pass
             else:
                 print(run.G+"Brute forcing SRV Records, this may take awhile..."+run.N)
-                if __name__ == "__main__":
+                if __name__ == "dnsquery":
                     p1 = threading.Thread(target=run.srv_tcp)
                     p1.start()
                     p2 = threading.Thread(target=run.srv_tls)
@@ -296,6 +327,34 @@ class Steps:
                     p3.join()
         else:
             print(run.R+"\nDomain does not exist"+run.N)
-
-
-call_function = Steps()
+    elif query_type == "srv":
+        print(run.G+"Brute forcing SRV Records, this may take awhile..."+run.N)
+        if __name__ == "dnsquery":
+            p4 = threading.Thread(target=run.srv_tcp)
+            p4.start()
+            p5 = threading.Thread(target=run.srv_tls)
+            p5.start()
+            p6 = threading.Thread(target=run.srv_udp)
+            p6.start()
+            p4.join()
+            p5.join()
+            p6.join()
+    elif query_type == "mail":
+        run.mx_name_search()
+        run.mail_ip()
+        run.compare()
+        if run.ans != 1:
+            run.whois_mail()
+            if run.ans != 1:
+                print(run.G+"\nEmail Exchange Service"+run.N)
+                print(run.R+"No Email Service in Database\n"+run.N)
+    elif query_type == "reg":
+        run.whois = str(whois.whois(run.var)).lower()
+        run.regi_search()
+    elif query_type == "exp":
+        run.whois = str(whois.whois(run.var)).lower()
+        run.exp_date()
+    elif query_type == "asn":
+        run.as_search()
+    print(run.G+"Finished query\n"+run.N)
+    sys.exit()
