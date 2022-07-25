@@ -126,6 +126,8 @@ class Dnsquery:
                 pass
             except dns.resolver.NoAnswer:
                 pass
+            except dns.resolver.NoNameservers:
+                pass
 
     def srv_tls(self):
         # search for srv records with tls
@@ -140,6 +142,8 @@ class Dnsquery:
                 pass
             except dns.resolver.NoAnswer:
                 pass
+            except dns.resolver.NoNameservers:
+                pass
 
     def srv_udp(self):
         # search for srv records with udp
@@ -153,6 +157,8 @@ class Dnsquery:
             except dns.exception.Timeout:
                 pass
             except dns.resolver.NoAnswer:
+                pass
+            except dns.resolver.NoNameservers:
                 pass
 
     def whois_ns_compare(self):
@@ -195,6 +201,40 @@ class Dnsquery:
                 print(self.Y+"Name_Server IP configuration correct\n"+self.N)
         except dns.resolver.NoAnswer:
             print(self.R+"No NS records to evaluate"+self.N)
+
+    def xfr(self):
+        master_addr = []
+        print(self.G+"Attempting zone transfer for "+self.var+self.N)
+        try:
+            ns = dns.resolver.resolve(self.var, "NS")
+            for ns_data in ns:
+                a = dns.resolver.resolve(str(ns_data), "A")
+                for a_data in a:
+                    master_addr.append(str(a_data))
+            for num in range(len(master_addr)):
+                try:
+                    xfr_answer = dns.query.xfr(master_addr[num], self.var)
+                    zone = dns.zone.from_xfr(xfr_answer)
+                    for name, ttl, rdata in zone.iterate_rdatas("A"):
+                        print(self.Y+"A:"+self.N+str(name)+"."+self.var+self.Y+" | IP:"+self.N+str(rdata))
+                    for name, ttl, rdata in zone.iterate_rdatas("MX"):
+                        print(self.Y+"MX:"+self.N+str(rdata))
+                    for name, ttl, rdata in zone.iterate_rdatas("TXT"):
+                        print(self.Y+"TXT:"+self.N+str(rdata))
+                    for name, ttl, rdata in zone.iterate_rdatas("CNAME"):
+                        print(self.Y+"CNAME:"+self.N+str(name)+"."+self.var)
+                    for name, ttl, rdata in zone.iterate_rdatas("SRV"):
+                        print(self.Y+"SRV:"+self.N+str(name)+"."+self.var)
+                except dns.query.TransferError:
+                    print(self.R+master_addr[num]+" zone transfer failed"+self.N)
+                except ConnectionResetError:
+                    print(self.R+master_addr[num]+" zone transfer failed"+self.N)
+                except dns.exception.FormError:
+                    print(self.R+master_addr[num]+" zone transfer failed"+self.N)
+                except TimeoutError:
+                    print(self.R+master_addr[num]+" timed out"+self.N)
+        except dns.resolver.NoNameservers:
+            print(self.R+"No nameservers found"+self.N)
 
     def as_search(self):
         # ASN info search
@@ -279,31 +319,10 @@ class Dnsquery:
         print(self.G+"PTR records"+self.N)
         try:
             addrs = dns.reversename.from_address(self.var)
-            print(dns.resolver.resolve(addrs, "PTR")[0])
+            print(dns.resolver.resolve(str(addrs), "PTR")[0])
         except dns.resolver.NXDOMAIN:
             print(self.R+"No records found"+self.N)
 
-    def xfr(self):
-        print(self.G+"Attempting Zone transfer for "+self.var+self.N)
-        try:
-            soa_answer = dns.resolver.resolve(self.var, "SOA", tcp=True)
-            soa_host = soa_answer[0].mname
-            master_answer = dns.resolver.resolve(soa_host, "A", tcp=True)
-            master_addr = master_answer[0].address
-            xfr_answer = dns.query.xfr(master_addr, self.var)
-            zone = dns.zone.from_xfr(xfr_answer)
-            for name, ttl, rdata in zone.iterate_rdatas("A"):
-                print(self.Y+"A:"+self.N+str(name)+"."+self.var+self.Y+" IP:"+self.N+str(rdata))
-            for name, ttl, rdata in zone.iterate_rdatas("MX"):
-                print(self.Y+"MX:"+self.N+str(rdata))
-            for name, ttl, rdata in zone.iterate_rdatas("TXT"):
-                print(self.Y+"TXT:"+self.N+str(rdata))
-            for name, ttl, rdata in zone.iterate_rdatas("CNAME"):
-                print(self.Y+"CNAME:"+self.N+str(name)+"."+self.var)
-            for name, ttl, rdata in zone.iterate_rdatas("SRV"):
-                print(self.Y+"SRV:"+self.N+str(name)+"."+self.var)
-        except Exception:
-            print(self.R+"Zone transfer failed"+self.N)
 
 def query(var, query_type):
     run = Dnsquery()
@@ -359,6 +378,8 @@ def query(var, query_type):
                     p3.join()
         else:
             print(run.R+"\nDomain does not exist"+run.N)
+        print(run.G+"Finished query\n"+run.N)
+        sys.exit()
     elif query_type == "srv":
         print(run.G+"Brute forcing SRV Records, this may take awhile..."+run.N)
         if __name__ == "dnsquery":
@@ -371,6 +392,8 @@ def query(var, query_type):
             p4.join()
             p5.join()
             p6.join()
+        print(run.G+"Finished query\n"+run.N)
+        sys.exit()
     elif query_type == "mail":
         run.mx_name_search()
         run.mail_ip()
@@ -396,4 +419,3 @@ def query(var, query_type):
     elif query_type == "xfr":
         run.xfr()
     print(run.G+"Finished query\n"+run.N)
-    sys.exit()
