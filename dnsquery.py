@@ -4,6 +4,7 @@ import sys
 import threading
 import whois
 import dns.resolver
+import dns.reversename
 import re
 
 
@@ -32,6 +33,8 @@ class Dnsquery:
             for rdata in a:
                 self.mx_ip = self.mx_ip + [rdata]
         except dns.resolver.NoAnswer:
+            pass
+        except dns.resolver.NoNameservers:
             pass
 
     def mx_name_search(self):
@@ -156,15 +159,18 @@ class Dnsquery:
         ans = 0
         self.whois = str(whois.whois(self.var)).lower()
         print(self.G+"\nComparing Whois name_server records"+self.N)
-        record = dns.resolver.resolve(self.var, "NS")
-        for rdata in record:
-            pattern = str(rdata)
-            if re.search(pattern, self.whois):
-                pass
-            else:
-                ans = 1
-                print(self.R+"Whois name_server records misconfiguration"+self.N)
-                break
+        try:
+            record = dns.resolver.resolve(self.var, "NS")
+            for rdata in record:
+                pattern = str(rdata)
+                if re.search(pattern, self.whois):
+                    pass
+                else:
+                    ans = 1
+                    print(self.R+"Whois name_server records misconfiguration"+self.N)
+                    break
+        except dns.resolver.NoAnswer:
+            pass
         if ans == 0:
             print(self.Y+"Whois name_server records correct"+self.N)
 
@@ -268,6 +274,14 @@ class Dnsquery:
         if ans != 1:
             print(self.R+"No Expiration date found "+self.N)
 
+    def ptr(self):
+        print(self.G+"PTR records"+self.N)
+        try:
+            addrs = dns.reversename.from_address(self.var)
+            print(dns.resolver.resolve(addrs, "PTR")[0])
+        except dns.resolver.NXDOMAIN:
+            print(self.R+"No records found"+self.N)
+
 
 def query(var, query_type):
     run = Dnsquery()
@@ -355,5 +369,9 @@ def query(var, query_type):
     elif query_type == "eva":
         run.whois_ns_compare()
         run.ns_ip_compare()
+    elif query_type == "ptr":
+        run.ptr()
+    elif query_type == "xfr":
+        pass
     print(run.G+"Finished query\n"+run.N)
     sys.exit()
