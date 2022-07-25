@@ -3,6 +3,7 @@ from ipwhois.asn import IPASN
 import sys
 import threading
 import whois
+import dns.zone
 import dns.resolver
 import dns.reversename
 import re
@@ -282,6 +283,27 @@ class Dnsquery:
         except dns.resolver.NXDOMAIN:
             print(self.R+"No records found"+self.N)
 
+    def xfr(self):
+        print(self.G+"Attempting Zone transfer for "+self.var+self.N)
+        try:
+            soa_answer = dns.resolver.resolve(self.var, "SOA", tcp=True)
+            soa_host = soa_answer[0].mname
+            master_answer = dns.resolver.resolve(soa_host, "A", tcp=True)
+            master_addr = master_answer[0].address
+            xfr_answer = dns.query.xfr(master_addr, self.var)
+            zone = dns.zone.from_xfr(xfr_answer)
+            for name, ttl, rdata in zone.iterate_rdatas("A"):
+                print(self.Y+"A:"+self.N+str(name)+"."+self.var+self.Y+" IP:"+self.N+str(rdata))
+            for name, ttl, rdata in zone.iterate_rdatas("MX"):
+                print(self.Y+"MX:"+self.N+str(rdata))
+            for name, ttl, rdata in zone.iterate_rdatas("TXT"):
+                print(self.Y+"TXT:"+self.N+str(rdata))
+            for name, ttl, rdata in zone.iterate_rdatas("CNAME"):
+                print(self.Y+"CNAME:"+self.N+str(name)+"."+self.var)
+            for name, ttl, rdata in zone.iterate_rdatas("SRV"):
+                print(self.Y+"SRV:"+self.N+str(name)+"."+self.var)
+        except Exception:
+            print(self.R+"Zone transfer failed"+self.N)
 
 def query(var, query_type):
     run = Dnsquery()
@@ -372,6 +394,6 @@ def query(var, query_type):
     elif query_type == "ptr":
         run.ptr()
     elif query_type == "xfr":
-        pass
+        run.xfr()
     print(run.G+"Finished query\n"+run.N)
     sys.exit()
