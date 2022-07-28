@@ -5,7 +5,7 @@
 3. 查EmailProvider、Registrar 和網域到期日
 4. 比較Whois的NS是否設錯
 5. 比較DNS是否放在同個IP
-6. 嘗試對DNS進行zone transfer
+6. 嘗試對DNS進行zone transfer(A, CNAME, MX, TXT, SRV)
 ## 安裝
 1. `git clone https://github.com/FDS-Andrew/Dnstool.git`
 2. `cd Dnstool`
