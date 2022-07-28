@@ -90,7 +90,7 @@ class Dnsquery:
                 record = dns.resolver.resolve(self.var, self.query_list[num])
                 print("\n"+self.G+self.query_list[num]+" Records"+self.N)
                 for rdata in record:
-                    print(rdata)
+                    print(rdata, "\n")
             except dns.resolver.NoAnswer:
                 print(self.R+"\nNo "+self.query_list[num]+" Records"+self.N)
             except dns.resolver.NoNameservers:
@@ -234,6 +234,8 @@ class Dnsquery:
                 except TimeoutError:
                     print(self.R+master_addr[num]+" timed out"+self.N)
         except dns.resolver.NoNameservers:
+            print(self.R+"No nameservers found"+self.N)
+        except dns.resolver.NoAnswer:
             print(self.R+"No nameservers found"+self.N)
 
     def as_search(self):
