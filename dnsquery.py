@@ -17,6 +17,7 @@ class Dnsquery:
     exchange = []
     ip_list = []
     srv_list = []
+    o365 = 0
     ans = 0
     error = 0
     G = "\033[1;32;40m"
@@ -66,6 +67,8 @@ class Dnsquery:
                 self.ans = 1
                 print(self.G+"Email Exchange Service"+self.N)
                 print(self.exchange[num])
+                if num == 3:
+                    self.o365 = 1
                 break
             else:
                 num += 1
@@ -425,7 +428,6 @@ def query(var, query_type):
             run.regi_search()
             run.exp_date()
             run.www_check()
-
             run.mx_name_search()
             run.mail_ip()
             run.compare()
@@ -434,6 +436,8 @@ def query(var, query_type):
                 if run.ans != 1:
                     print(run.G+"\nEmail Exchange Service"+run.N)
                     print(run.R+"No Email Service in Database\n"+run.N)
+            if run.o365 == 1:
+                run.o365check()
         else:
             print(run.R+"\nDomain does not exist"+run.N)
     elif query_type == "all":
@@ -510,4 +514,4 @@ def query(var, query_type):
         run.xfr()
     elif query_type == "365":
         run.o365check()
-    print(run.G+"Finished query\n"+run.N)
+    print(run.G+"\nFinished query\n"+run.N)
