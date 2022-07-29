@@ -1,6 +1,6 @@
 # Dnstool [![Language grade: Python](https://img.shields.io/lgtm/grade/python/g/FDS-Andrew/Dnstool.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/FDS-Andrew/Dnstool/context:python)
 ## 功能
-1. 查A、AAAA、MX、NS、SRV、TXT、SOA、PTR records
+1. 查A、AAAA、MX、NS、SRV、TXT、SOA、PTR、WWW records
 2. 查ASN和國家
 3. 查EmailProvider、Registrar 和網域到期日
 4. 比較Whois的NS是否設錯
