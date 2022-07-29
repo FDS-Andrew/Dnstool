@@ -18,16 +18,15 @@
 3. `>>>dnsquery.query("domain_name.com", "type")`
 ## type
 1. **std:** 包含A、AAAA、MX、NS、TXT、SOA、ASN、Registrar、Expiration date、Email service provider、Whois NS evaluation和DNS IP evaluation
-2. **all:** 比std多SRV record
-3. **srv:** SRV record
-4. **mail:** Email service provider
-5. **asn:** ASN
-6. **reg:** Registrar(註冊商)
-7. **exp:** Expiration date(網域到期日)
-8. **eva:** Whois NS evaluation和DNS IP evaluation
-9. **ptr:** reverse lookup
-10. **xfr:** Zone transfer嘗試將DNS裡的record提出
-11. **365:** 驗證是否有各項Office 365 records
+2. **srv:** SRV record
+3. **mail:** Email service provider
+4. **asn:** ASN
+5. **reg:** Registrar(註冊商)
+6. **exp:** Expiration date(網域到期日)
+7. **eva:** Whois NS evaluation和DNS IP evaluation
+8. **ptr:** reverse lookup
+9. **xfr:** Zone transfer嘗試將DNS裡的record提出
+10. **365:** 驗證是否有各項Office 365 records
 ## 備註
 > 1. 若要用digdns不要改 **`~/.digrc`** *(若要自用 **dig** 請加 `-r` )*
 > 2. 若不使用python可用`digdns`或`newrecon` 
