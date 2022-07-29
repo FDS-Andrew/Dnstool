@@ -99,6 +99,9 @@ class Dnsquery:
             except dns.resolver.NXDOMAIN:
                 self.error = 1
                 break
+            except dns.resolver.LifetimeTimeout:
+                self.error = 1
+                break
 
     def list(self):
         # format srv_list
@@ -399,6 +402,15 @@ class Dnsquery:
         except Exception:
             print(self.R+"SRV records doesn't have sipfed.online.lync.com"+self.N)
 
+    def www_check(self):
+        print(self.G+"\nChecking for www record"+self.N)
+        try:
+            a = dns.resolver.resolve("www."+self.var, "A")
+            if a:
+                print(self.Y+"Domain have www record: "+self.N+"www."+self.var+"\n")
+        except Exception:
+            print(self.R+"Domain doesn't have www record\n"+self.N)
+
 
 def query(var, query_type):
     run = Dnsquery()
@@ -412,6 +424,8 @@ def query(var, query_type):
             run.as_search()
             run.regi_search()
             run.exp_date()
+            run.www_check()
+
             run.mx_name_search()
             run.mail_ip()
             run.compare()
