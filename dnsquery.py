@@ -325,6 +325,80 @@ class Dnsquery:
         except dns.resolver.NXDOMAIN:
             print(self.R+"No records found"+self.N)
 
+    def o365check(self):
+        print(self.G+"\nChecking if DNS records are configured for Office 365"+self.N)
+        try:
+            cname = dns.resolver.resolve("autodiscover."+self.var, "CNAME")
+            for data in cname:
+                if re.search("autodiscover.outlook.com", str(data)):
+                    print(self.Y+"CNAME records have 'autodiscover.outlook.com'"+self.N+" (Office 365)")
+                else:
+                    print(self.R+"CNAME records not configured for Office 365"+self.N)
+        except Exception:
+            print(self.R+"CNAME records incorrect"+self.N)
+        try:
+            cname = dns.resolver.resolve("msoid."+self.var, "CNAME")
+            for data in cname:
+                if re.search("clientconfig.microsoftonline-p.net", str(data)):
+                    print(self.Y+"CNAME records have 'clientconfig.microsoftonline-p.net'"+self.N+" (Office 365)")
+                else:
+                    pass
+        except Exception:
+            pass
+        try:
+            cname = dns.resolver.resolve("lyncdiscover."+self.var, "CNAME")
+            for data in cname:
+                if re.search("webdir.online.lync.com", str(data)):
+                    print(self.Y+"CNAME records have 'webdir.online.lync.com'"+self.N+" (Skype)")
+                else:
+                    pass
+        except Exception:
+            pass
+        try:
+            ans = 0
+            mx = dns.resolver.resolve(self.var, "MX")
+            for data in mx:
+                if re.search("mail.protection.outlook.com", str(data)):
+                    print(self.Y+"MX records have 'mail.protection.outlook.com'"+self.N)
+                    ans = 1
+                    break
+                elif re.search("protection.outlook.com", str(data)):
+                    print(self.R+"MX record deprecated, please update to 'mail.protection.outlook.com'"+self.N)
+                    ans = 1
+                    break
+                else:
+                    pass
+            if ans != 1:
+                print(self.R+"MX records not configured for Office 365"+self.N)
+        except Exception:
+            print(self.R+"MX records incorrect"+self.N)
+        try:
+            ans = 0
+            spf = dns.resolver.resolve(self.var, "txt")
+            for data in spf:
+                if re.search("include:spf.protection.outlook.com", str(data)):
+                    print(self.Y+"SPF records have 'include:spf.protection.outlook.com'"+self.N)
+                    ans = 1
+                    break
+                else:
+                    pass
+            if ans != 1:
+                print(self.R+"SPF records not configured for Office 365"+self.N)
+        except Exception:
+            print(self.R+"SPF records incorrect"+self.N)
+        try:
+            tls = dns.resolver.resolve("_sip._tls."+self.var, "SRV")
+            if tls:
+                print(self.Y+"SRV records have 'sipdir.online.lync.com'"+self.N)
+        except Exception:
+            print(self.R+"SRV records doesn't have sipdir.online.lync.com"+self.N)
+        try:
+            tcp = dns.resolver.resolve("_sipfederationtls._tcp."+self.var, "SRV")
+            if tcp:
+                print(self.Y+"SRV records have 'sipfed.online.lync.com"+self.N)
+        except Exception:
+            print(self.R+"SRV records doesn't have sipfed.online.lync.com"+self.N)
+
 
 def query(var, query_type):
     run = Dnsquery()
@@ -420,4 +494,6 @@ def query(var, query_type):
         run.ptr()
     elif query_type == "xfr":
         run.xfr()
+    elif query_type == "365":
+        run.o365check()
     print(run.G+"Finished query\n"+run.N)
