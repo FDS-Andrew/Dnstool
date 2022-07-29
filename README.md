@@ -17,7 +17,7 @@
 2. `>>>import dnsquery`
 3. `>>>dnsquery.query("domain_name.com", "type")`
 ## type
-1. **std:** 包含A、AAAA、MX、NS、TXT、SOA、ASN、Registrar、Expiration date、Email service provider、Whois NS evaluation和DNS IP evaluation
+1. **std:** 包含A、AAAA、MX、NS、TXT、SOA、ASN、Registrar、Expiration date、WWW、Email service provider、Whois NS evaluation和DNS IP evaluation
 2. **srv:** SRV record
 3. **mail:** Email service provider
 4. **asn:** ASN
