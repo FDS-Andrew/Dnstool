@@ -6,6 +6,7 @@
 4. 比較Whois的NS是否設錯
 5. 比較DNS是否放在同個IP
 6. 嘗試對DNS進行zone transfer(A, CNAME, MX, TXT, SRV)
+7. 驗證是否有Office 365必要records
 ## 安裝
 1. `git clone https://github.com/FDS-Andrew/Dnstool.git`
 2. `cd Dnstool`
@@ -26,6 +27,7 @@
 8. **eva:** Whois NS evaluation和DNS IP evaluation
 9. **ptr:** reverse lookup
 10. **xfr:** Zone transfer嘗試將DNS裡的record提出
+11. **365:** 驗證是否有各項Office 365 records
 ## 備註
 > 1. 若要用digdns不要改 **`~/.digrc`** *(若要自用 **dig** 請加 `-r` )*
 > 2. 若不使用python可用`digdns`或`newrecon` 
