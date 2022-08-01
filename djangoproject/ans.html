@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<body style="background-color:black">
+<h1 style="color:lime">Domain: {{ domain }}</h1>
+<br>
+<h2 style="color:lime">A records:</h2>
+{% if a == "none" %} <h3 style="color:crimson"><li>No A records</li></h3><br>
+{% else %}{% for data in a %}<h3 style="color:white"><li>{{ data }}</li></h3><br>{% endfor %}{% endif %}
+<h2 style="color:lime">AAAA records:</h2>
+{% if aaaa == "none" %} <h3 style="color:crimson"><li>No AAAA records</h3><br>
+{% else %}{% for data in aaaa %}<h3 style="color:white"><li>{{ data }}</li></h3><br>{% endfor %}{% endif %}
+<h2 style="color:lime">NS records:</h2>
+{% if ns == "none" %} <h3 style="color:crimson"><li>No NS records</h3><br>
+{% else %}{% for data in ns %}<h3 style="color:white"><li>{{ data }}</li></h3><br>{% endfor %}{% endif %}
+<h2 style="color:lime">MX records:</h2>
+{% if mx == "none" %} <h3 style="color:crimson"><li>No MX records</h3><br>
+{% else %}{% for data in mx %}<h3 style="color:white"><li>{{ data }}</li></h3><br>{% endfor %}{% endif %}
+<h2 style="color:lime">TXT records:</h2>
+{% if txt == "none" %} <h3 style="color:crimson"><li>No TXT records</li></h3><br>
+{% else %}{% for data in txt %}<h3 style="color:white"><li>{{ data }}</li></h3><br>{% endfor %}{% endif %}
+<h2 style="color:lime">SOA records:</h2>
+{% if soa == "none" %} <h3 style="color:crimson"><li>No SOA records</h3><br>
+{% else %}{% for data in soa %}<h3 style="color:white"><li>{{ data }}</li></h3><br>{% endfor %}{% endif %}
+<br>
+<h2 style="color:lime">WWW records</h2>
+{% if www == "none" %}<h3 style="color:crimson"><li>Domain doesn't have www record</li></h3>
+{% elif www == "correct" %}<h3 style="color:gold"><li>Domain have www record: www.{{ domain }}</li></h3>{% endif %}
+<br>
+<h2 style="color:lime">Registrar:</h2>
+{% if registrar == "none" %} <h3 style="color:crimson"><li>Registrar unknown</li></h3>
+{% else %}<h3 style="color:white"><li>{{ registrar }}</li></h3>{% endif %}
+<br>
+<h2 style="color:lime">Expiration date:</h2>
+{% if registrar == "none" %} <h3 style="color:crimson"><li>Expiration date unknown</li></h3>
+{% else %}<h3 style="color:white"><li>{{ exp_date }}</li></h3>{% endif %}
+<br>
+<h2 style="color:lime">ASN records:</h2>
+{% for data in asn %}<h3 style="color:white"><li>{{ data }}</li></h3>{% endfor %}
+{% for data in country %}<h3 style="color:white"><li>{{ data }}</li></h3>{% endfor %}
+{% for data in registry %}<h3 style="color:white"><li>{{ data }}</li></h3>{% endfor %}
+{% for data in description %}<h3 style="color:white"><li>{{ data }}</li></h3>{% endfor %}
+<br>
+<h2 style="color:lime">Comparing Whois name_server records...</h2>
+{% if whois_ns == "correct" %} <h3 style="color:gold"><li>Whois name_server records correct</li></h3>
+{% elif whois_ns == "misconfigured" %} <h3 style="color:crimson"><li>Whois name_server records misconfiguration</li></h3>{% endif %}
+<br>
+<h2 style="color:lime">Evaluating Name_Server IP...</h2>
+{% if ns_ip == "correct" %} <h3 style="color:gold"><li>Name_Server IP configuration correct</li></h3>
+{% elif ns_ip == "misconfigured" %} <h3 style="color:crimson"><li>Name_Server nested in same IP</li></h3>
+{% elif ns_ip == "none" %} <h3 style="color:crimson"><li>No NS records to evaluate</li></h3>{% endif %}
+<br>
+<h2 style="color:lime">Email service:</h2>
+{% if mail_search == "misconfigured" %}<h3 style="color:crimson"><li>No email service found</li></h3>
+{% else %}<h3 style="color:white"><li>{{ mail_search }}</li></h3>{% endif %}
+<br>
+<h2 style="color:lime">Checking if DNS records are configured for Office 365...</h2>
+{% if auto == "misconfigured" %}<h3 style="color:crimson"><li>CNAME records not configured for Office 365</li></h3>
+{% elif auto == "correct" %}<h3 style="color:gold"><li>CNAME records have 'autodiscover.outlook.com' (Office 365)</li></h3>{% endif %}
+{% if msoid == "correct" %}<h3 style="color:gold"><li>CNAME records have 'clientconfig.microsoftonline-p.net' (Office 365)</li></h3>{% endif %}
+{% if lync == "correct" %}<h3 style="color:gold"><li>CNAME records have 'webdir.online.lync.com' (Skype)</li></h3>{% endif %}
+{% if 365mx == "misconfigured" %}<h3 style="color:crimson"><li>MX records not configured for Office 365</li></h3>
+{% elif 365mx == "update" %}<h3 style="color:crimson"><li>MX records deprecated, please update to 'mail.protection.outlook.com'</li></h3>
+{% elif 365mx == "correct" %}<h3 style="color:gold"><li>MX records have 'mail.protection.outlook.com'</li></h3>{% endif %}
+{% if spf == "misconfigured" %}<h3 style="color:crimson"><li>SPF records not configured for Office 365</li></h3>
+{% elif spf == "correct" %}<h3 style="color:gold"><li>SPF records have 'include:spf.protection.outlook.com'</li></h3>{% endif %}
+{% if sipdir == "misconfigured" %}<h3 style="color:crimson"><li>SRV records doesn't have 'sipdir.online.lync.com'</li></h3>
+{% elif sipdir == "correct" %}<h3 style="color:gold"><li>SRV records have 'sipdir.online.lync.com'</li></h3>{% endif %}
+{% if sipfed == "misconfigured" %}<h3 style="color:crimson"><li>SRV records doesn't have 'sipfed.online.lync.com'</li></h3>
+{% elif sipfed == "correct" %}<h3 style="color:gold"><li>SRV records have 'sipfed.online.lync.com'</li></h3>{% endif %}
+<br>
+
+</body>
+</html>
