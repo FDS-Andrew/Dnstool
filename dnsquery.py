@@ -336,7 +336,7 @@ class Dnsquery:
         try:
             cname = dns.resolver.resolve("autodiscover."+self.var, "CNAME")
             for data in cname:
-                if re.search("autodiscover.outlook.com", str(data)):
+                if re.search(r"autodiscover.outlook.com", str(data)):
                     print(self.Y+"CNAME records have 'autodiscover.outlook.com'"+self.N+" (Office 365)")
                 else:
                     print(self.R+"CNAME records not configured for Office 365"+self.N)
@@ -345,7 +345,7 @@ class Dnsquery:
         try:
             cname = dns.resolver.resolve("msoid."+self.var, "CNAME")
             for data in cname:
-                if re.search("clientconfig.microsoftonline-p.net", str(data)):
+                if re.search(r"clientconfig.microsoftonline-p.net", str(data)):
                     print(self.Y+"CNAME records have 'clientconfig.microsoftonline-p.net'"+self.N+" (Office 365)")
                 else:
                     pass
@@ -354,7 +354,7 @@ class Dnsquery:
         try:
             cname = dns.resolver.resolve("lyncdiscover."+self.var, "CNAME")
             for data in cname:
-                if re.search("webdir.online.lync.com", str(data)):
+                if re.search(r"webdir.online.lync.com", str(data)):
                     print(self.Y+"CNAME records have 'webdir.online.lync.com'"+self.N+" (Skype)")
                 else:
                     pass
@@ -364,11 +364,11 @@ class Dnsquery:
             ans = 0
             mx = dns.resolver.resolve(self.var, "MX")
             for data in mx:
-                if re.search("mail.protection.outlook.com", str(data)):
+                if re.search(r"mail.protection.outlook.com", str(data)):
                     print(self.Y+"MX records have 'mail.protection.outlook.com'"+self.N)
                     ans = 1
                     break
-                elif re.search("protection.outlook.com", str(data)):
+                elif re.search(r"protection.outlook.com", str(data)):
                     print(self.R+"MX record deprecated, please update to 'mail.protection.outlook.com'"+self.N)
                     ans = 1
                     break
@@ -382,7 +382,7 @@ class Dnsquery:
             ans = 0
             spf = dns.resolver.resolve(self.var, "txt")
             for data in spf:
-                if re.search("include:spf.protection.outlook.com", str(data)):
+                if re.search(r"include:spf.protection.outlook.com", str(data)):
                     print(self.Y+"SPF records have 'include:spf.protection.outlook.com'"+self.N)
                     ans = 1
                     break
