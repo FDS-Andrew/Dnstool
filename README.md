@@ -1,4 +1,4 @@
-# Dnstool [![Language grade: Python](https://img.shields.io/lgtm/grade/python/g/FDS-Andrew/Dnstool.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/FDS-Andrew/Dnstool/context:python)
+# Dnstool [![Total alerts](https://img.shields.io/lgtm/alerts/g/FDS-Andrew/Dnstool.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/FDS-Andrew/Dnstool/alerts/)[![Language grade: Python](https://img.shields.io/lgtm/grade/python/g/FDS-Andrew/Dnstool.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/FDS-Andrew/Dnstool/context:python)
 ## 功能
 1. 查A、AAAA、MX、NS、SRV、TXT、SOA、PTR、WWW records
 2. 查ASN和國家
