@@ -169,22 +169,44 @@ class Dnsquery:
 
     def whois_ns_compare(self):
         # check if whois record is correct
-        ans = 0
-        self.whois = str(whois.whois(self.var)).lower()
-        print(self.G+"\nComparing Whois name_server records"+self.N)
-        try:
-            record = dns.resolver.resolve(self.var, "NS")
-            for rdata in record:
-                pattern = str(rdata)
-                if re.search(pattern, self.whois):
-                    pass
-                else:
-                    ans = 1
-                    print(self.R+"Whois name_server records misconfiguration"+self.N)
-                    break
-        except dns.resolver.NoAnswer:
-            pass
-        if ans == 0:
+        x = set()
+        y = []
+        z = []
+        whois_origin = whois.whois(self.var)
+        self.whois = str(whois_origin).lower()
+        whois_ns = str(whois_origin.name_servers).lower()
+        if '\'' in whois_ns:
+            replacements = [
+                ("\'", ""),
+                ("\[", ""),
+                ("\]", ""),
+                ("\,", "")
+            ]
+            for old, new in replacements:
+                whois_ns = re.sub(old, new, whois_ns)
+            for ns in whois_ns.split():
+                x.add(ns)
+        else:
+            for ns in whois_ns.split():
+                x.add(ns)
+        x = list(x)
+        for num in x:
+            if re.search(r"\d$", num):
+                z.append(num)
+        for num in z:
+            x.remove(num)
+        ns = dns.resolver.resolve(self.var, "NS")
+        for data in ns:
+            data = re.sub(r"\.$", "", str(data))
+            y.append(data)
+        x = set(x)
+        y = set(y)
+        joined = x.union(y)
+        if len(joined) != len(x):
+            print(self.R+"Whois name_server records misconfiguration"+self.N)
+        elif len(joined) != len(y):
+            print(self.R+"Whois name_server records misconfiguration"+self.N)
+        else:
             print(self.Y+"Whois name_server records correct"+self.N)
 
     def ns_ip_compare(self):
