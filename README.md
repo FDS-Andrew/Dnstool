@@ -1,8 +1,8 @@
 # Dnstool [![Total alerts](https://img.shields.io/lgtm/alerts/g/FDS-Andrew/Dnstool.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/FDS-Andrew/Dnstool/alerts/)[![Language grade: Python](https://img.shields.io/lgtm/grade/python/g/FDS-Andrew/Dnstool.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/FDS-Andrew/Dnstool/context:python)
 ## 功能
-1. 查A、AAAA、MX、NS、SRV、TXT、SOA、PTR、WWW records
+1. 查A、 AAAA、 MX、 NS、 SRV、 TXT、 SOA、 PTR、 WWW records
 2. 查ASN和國家
-3. 查EmailProvider、Registrar 和網域到期日
+3. 查EmailProvider、 Registrar 和網域到期日
 4. 比較Whois的NS是否設錯
 5. 比較DNS是否放在同個IP
 6. 嘗試對DNS進行zone transfer(A, CNAME, MX, TXT, SRV)
