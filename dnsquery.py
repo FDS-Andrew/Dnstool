@@ -362,7 +362,7 @@ class Dnsquery:
                     print(self.Y+"CNAME records have 'autodiscover.outlook.com'"+self.N+" (Office 365)")
                 else:
                     print(self.R+"CNAME records not configured for Office 365"+self.N)
-        except Exception:
+        except dns.resolver.NoAnswer:
             print(self.R+"CNAME records incorrect"+self.N)
         try:
             cname = dns.resolver.resolve("msoid."+self.var, "CNAME")
@@ -371,7 +371,7 @@ class Dnsquery:
                     print(self.Y+"CNAME records have 'clientconfig.microsoftonline-p.net'"+self.N+" (Office 365)")
                 else:
                     pass
-        except Exception:
+        except dns.resolver.NoAnswer:
             pass
         try:
             cname = dns.resolver.resolve("lyncdiscover."+self.var, "CNAME")
@@ -380,7 +380,7 @@ class Dnsquery:
                     print(self.Y+"CNAME records have 'webdir.online.lync.com'"+self.N+" (Skype)")
                 else:
                     pass
-        except Exception:
+        except dns.resolver.NoAnswer:
             pass
         try:
             ans = 0
@@ -398,7 +398,7 @@ class Dnsquery:
                     pass
             if ans != 1:
                 print(self.R+"MX records not configured for Office 365"+self.N)
-        except Exception:
+        except dns.resolver.NoAnswer:
             print(self.R+"MX records incorrect"+self.N)
         try:
             ans = 0
@@ -412,19 +412,19 @@ class Dnsquery:
                     pass
             if ans != 1:
                 print(self.R+"SPF records not configured for Office 365"+self.N)
-        except Exception:
+        except dns.resolver.NoAnswer:
             print(self.R+"SPF records incorrect"+self.N)
         try:
             tls = dns.resolver.resolve("_sip._tls."+self.var, "SRV")
             if tls:
                 print(self.Y+"SRV records have 'sipdir.online.lync.com'"+self.N)
-        except Exception:
+        except dns.resolver.NoAnswer:
             print(self.R+"SRV records doesn't have sipdir.online.lync.com"+self.N)
         try:
             tcp = dns.resolver.resolve("_sipfederationtls._tcp."+self.var, "SRV")
             if tcp:
                 print(self.Y+"SRV records have 'sipfed.online.lync.com"+self.N)
-        except Exception:
+        except dns.resolver.NoAnswer:
             print(self.R+"SRV records doesn't have sipfed.online.lync.com"+self.N)
 
     def www_check(self):
