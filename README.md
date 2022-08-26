@@ -1,20 +1,20 @@
 # Dnstool [![Total alerts](https://img.shields.io/lgtm/alerts/g/FDS-Andrew/Dnstool.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/FDS-Andrew/Dnstool/alerts/)[![Language grade: Python](https://img.shields.io/lgtm/grade/python/g/FDS-Andrew/Dnstool.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/FDS-Andrew/Dnstool/context:python)
 ## 功能
-1. 查A、 AAAA、 MX、 NS、 SRV、 TXT、 SOA、 PTR、 WWW records
+1. 查'A', 'AAAA', 'MX', 'NS', 'SRV', 'TXT', 'SOA', 'PTR', 'WWW' records
 2. 查ASN和國家
-3. 查EmailProvider、 Registrar 和網域到期日
+3. 查'EmailProvider', 'Registrar' 和網域到期日
 4. 比較Whois的NS是否設錯
 5. 比較DNS是否放在同個IP
-6. 嘗試對DNS進行zone transfer(A, CNAME, MX, TXT, SRV)
-7. 驗證是否有Office 365必要records
+6. 嘗試對DNS進行zone transfer('A', 'CNAME', 'MX', 'TXT', 'SRV')
+7. 驗證是否有Office365必要records
 ## 安裝
-1. `git clone https://github.com/FDS-Andrew/Dnstool.git`
+1. ` git clone https://github.com/FDS-Andrew/Dnstool.git`
 2. `cd Dnstool`
 3. `bash prep.sh` 
 4. 若想使用digdns或newrecon輸入`source ~/.bash_aliases` 
 ## 使用
 1. 在terminal輸入`python3`若使用python console則不需
-2. `>>>import dnsquery`
+2. ` >>>import dnsquery`
 3. `>>>dnsquery.query("domain_name.com", "type")`
 ## type
 1. **std:** 包含A、AAAA、MX、NS、TXT、SOA、ASN、Registrar、Expiration date、WWW、Email service provider、Whois NS evaluation、Office 365 evaluation和DNS IP evaluation
