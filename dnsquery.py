@@ -243,15 +243,15 @@ class Dnsquery:
                 try:
                     xfr_answer = dns.query.xfr(master_addr[num], self.var)
                     zone = dns.zone.from_xfr(xfr_answer)
-                    for name, ttl, rdata in zone.iterate_rdatas("A"):
+                    for name, rdata in zone.iterate_rdatas("A"):
                         print(self.Y+"A:"+self.N+str(name)+"."+self.var+self.Y+" | IP:"+self.N+str(rdata))
-                    for name, ttl, rdata in zone.iterate_rdatas("MX"):
+                    for name, rdata in zone.iterate_rdatas("MX"):
                         print(self.Y+"MX:"+self.N+str(rdata))
-                    for name, ttl, rdata in zone.iterate_rdatas("TXT"):
+                    for name, rdata in zone.iterate_rdatas("TXT"):
                         print(self.Y+"TXT:"+self.N+str(rdata))
-                    for name, ttl, rdata in zone.iterate_rdatas("CNAME"):
+                    for name, rdata in zone.iterate_rdatas("CNAME"):
                         print(self.Y+"CNAME:"+self.N+str(name)+"."+self.var)
-                    for name, ttl, rdata in zone.iterate_rdatas("SRV"):
+                    for name, rdata in zone.iterate_rdatas("SRV"):
                         print(self.Y+"SRV:"+self.N+str(name)+"."+self.var)
                 except dns.query.TransferError:
                     print(self.R+master_addr[num]+" zone transfer failed"+self.N)
