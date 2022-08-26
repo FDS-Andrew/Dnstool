@@ -19,7 +19,6 @@ class Dnsquery:
     srv_list = []
     o365 = 0
     ans = 0
-    error = 0
     G = "\033[1;32;40m"
     R = "\033[1;31;40m"
     Y = "\033[1;33;40m"
@@ -96,15 +95,6 @@ class Dnsquery:
                     print(rdata, "\n")
             except dns.resolver.NoAnswer:
                 print(self.R+"\nNo "+self.query_list[num]+" Records"+self.N)
-            except dns.resolver.NoNameservers:
-                self.error = 1
-                break
-            except dns.resolver.NXDOMAIN:
-                self.error = 1
-                break
-            except dns.resolver.LifetimeTimeout:
-                self.error = 1
-                break
 
     def list(self):
         # format srv_list
@@ -440,60 +430,58 @@ class Dnsquery:
 def query(var, query_type):
     run = Dnsquery()
     run.var = var
+    try:
+        dns.resolver.resolve(var, "A")
+    except dns.resolver.NXDOMAIN:
+        print(run.R+"\nDomain does not exist"+run.N)
+        sys.exit()
     run.list()
     if query_type == "std":
         run.record_search()
-        if run.error != 1:
-            run.whois_ns_compare()
-            run.ns_ip_compare()
-            run.as_search()
-            run.regi_search()
-            run.exp_date()
-            run.www_check()
-            run.mx_name_search()
-            run.mail_ip()
-            run.compare()
+        run.whois_ns_compare()
+        run.ns_ip_compare()
+        run.as_search()
+        run.regi_search()
+        run.exp_date()
+        run.www_check()
+        run.mx_name_search()
+        run.mail_ip()
+        run.compare()
+        if run.ans != 1:
+            run.whois_mail()
             if run.ans != 1:
-                run.whois_mail()
-                if run.ans != 1:
-                    print(run.G+"\nEmail Exchange Service"+run.N)
-                    print(run.R+"No Email Service in Database\n"+run.N)
+                print(run.G+"\nEmail Exchange Service"+run.N)
+                print(run.R+"No Email Service in Database\n"+run.N)
             if run.o365 == 1:
                 run.o365check()
-        else:
-            print(run.R+"\nDomain does not exist"+run.N)
     elif query_type == "all":
         run.record_search()
-        if run.error != 1:
-            run.whois_ns_compare()
-            run.ns_ip_compare()
-            run.as_search()
-            run.regi_search()
-            run.exp_date()
-            run.mx_name_search()
-            run.mail_ip()
-            run.compare()
+        run.whois_ns_compare()
+        run.ns_ip_compare()
+        run.as_search()
+        run.regi_search()
+        run.exp_date()
+        run.mx_name_search()
+        run.mail_ip()
+        run.compare()
+        if run.ans != 1:
+            run.whois_mail()
             if run.ans != 1:
-                run.whois_mail()
-                if run.ans != 1:
-                    print(run.G+"\nEmail Exchange Service"+run.N)
-                    print(run.R+"No Email Service in Database\n"+run.N)
-            if run.error == 1:
-                pass
-            else:
-                print(run.G+"Brute forcing SRV Records, this may take awhile..."+run.N)
-                if __name__ == "dnsquery":
-                    p1 = threading.Thread(target=run.srv_tcp)
-                    p1.start()
-                    p2 = threading.Thread(target=run.srv_tls)
-                    p2.start()
-                    p3 = threading.Thread(target=run.srv_udp)
-                    p3.start()
-                    p1.join()
-                    p2.join()
-                    p3.join()
-        else:
-            print(run.R+"\nDomain does not exist"+run.N)
+                print(run.G+"\nEmail Exchange Service"+run.N)
+                print(run.R+"No Email Service in Database\n"+run.N)
+            if run.o365 == 1:
+                run.o365check()
+        print(run.G+"Brute forcing SRV Records, this may take awhile..."+run.N)
+        if __name__ == "dnsquery":
+            p1 = threading.Thread(target=run.srv_tcp)
+            p1.start()
+            p2 = threading.Thread(target=run.srv_tls)
+            p2.start()
+            p3 = threading.Thread(target=run.srv_udp)
+            p3.start()
+            p1.join()
+            p2.join()
+            p3.join()
         print(run.G+"Finished query\n"+run.N)
         sys.exit()
     elif query_type == "srv":
