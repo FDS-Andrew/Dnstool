@@ -1,16 +1,13 @@
-import dns.resolver
+from pythonping import ping
 
 class Check:
     def __init__(self, domain_name):
-        proceed = True
-
-        try:
-            dns.resolver.resolve(domain_name, "A")
-        except dns.exception.DNSException:
-            proceed = False
-
-        self.proceed = proceed
+        self.domain_name = domain_name
 
     def validity(self):
-        if self.proceed:
+        try:
+            ping(self.domain_name, count=3, size=1)
             return True
+        except RuntimeError:
+            return False
+
