@@ -21,21 +21,21 @@ class Resolver:
 
         self.resolve_dict = resolve_dict
 
-    def a_record(self):
+    def a_record(self) -> list:
         return self.resolve_dict["A"]
 
-    def aaaa_record(self):
+    def aaaa_record(self) -> list:
         return self.resolve_dict["AAAA"]
 
-    def ns_record(self):
+    def ns_record(self) -> list:
         return self.resolve_dict["NS"]
 
-    def mx_record(self):
+    def mx_record(self) -> list:
         return self.resolve_dict["MX"]
 
-    def txt_record(self):
+    def txt_record(self) -> list:
         return self.resolve_dict["TXT"]
 
-    def soa_record(self):
+    def soa_record(self) -> list:
         return self.resolve_dict["SOA"]
 
